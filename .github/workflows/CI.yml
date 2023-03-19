@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: src/
+      - name: setup ROS noetic
+        uses: betwo/github-setup-catkin@master
+        with:
+          ros-version: 'noetic'
+          build-tool: 'catkin_tools'
+          workspace: '$GITHUB_WORKSPACE'
+      - name: build workspace
+        run: catkin build
+      - name: test workspace
+        run: catkin test 
