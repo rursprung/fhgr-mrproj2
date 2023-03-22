@@ -19,18 +19,21 @@ The mapping process will be conducted in 2D. However, it's important to note tha
 The software will be roughly structured along these boundaries:
 ```mermaid
 graph TD
-    Controller -->|move command| MC
+    Controller -->|"move command<br/>message: <code>geometry_msgs/Twist</code><br/>topic: <code>/cmd_vel</code>"| MC
 
-    MC[Movement Controller] -->|PWM signals| Motors
-    Motors[[Motors]] -->|speed from hall sensors| Controller
+    MC[Movement Controller]
+    MC -->|PWM signal| LM[[Left Motor]]
+    MC -->|PWM signal| RM[[Right Motor]]
 
-    Controller -->|fire command| GC
+    Controller -->|"fire command<br/>service: <code>FireAt</code><br/>request:<code>geometry_msgs/Point</code>"| GC
     GC[Gun Controller] -->|PWM signal| GS
-    GS[Gun Servos]
+    GC -->|Trigger signal| GT
+    GS[["Gun Servo (height adjust)"]]
+    GT[[Gun Trigger]]
 
-    LIDAR[[LIDAR]] -->|point cloud| Controller
-    Camera[[Camera]] -->|image| IP
-    IP[Image Processor] -->|target information| Controller
+    LIDAR[[LIDAR]] -->|"point cloud<br/>message: <code>sensor_msgs/LaserScan</code><br/>topic: <code>/scan</code>"| Controller
+    Camera[[Camera]] -->|"image<br/>message: <code>sensor_msgs/Image</code><br/>topic: <code>/image</code>"| IP
+    IP[Image Processor] -->|"target information<br/>message: <code>geometry_msgs/PointStamped</code><br/>topic: <code>/target</code>"| Controller
 ```
 
 Note that various helper ROS nodes are not (yet) shown here. Only the main components are shown.
