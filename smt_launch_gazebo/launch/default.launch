@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <launch>
-  <!--
-    note: this is currently not doing much yet, more will be added to actually launch
-          a proper simulation in future steps once nodes are being implemented and
-          content is being added, at which point this comment can then also be removed.
-  -->
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+  <arg name="rvizconfig" default="$(find smt_model_description)/launch/urdf.rviz"/>
+  <node name="rviz" pkg="rviz" args="-d $(arg rvizconfig)" type="rviz" required="true"/>
+
+  <include file="$(find smt_model_description)/launch/gazebo.launch"/>
 </launch>
