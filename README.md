@@ -1,6 +1,19 @@
 # Mobile Robotics Project 2
 An autonomous vehicle with Lidar will be developed as a group project as part of the [FHGR BSc Mobile Robotics](https://fhgr.ch/mr).
 
+## Goals of the Tank
+### Modes of Operation
+The tank will feature three different control modes:
+* In manual mode, the user will utilize a laptop GUI to control the tank using arrow keys. While in this mode, the lidar will be active but won't map the room.
+* The automatic exploration mode will scan the room and create a map of the surroundings. The live progress will be displayed in the laptop GUI.
+* Once the mapping is complete, the third mode can be activated. In this mode, the camera will be enabled and will search for QR codes. Upon finding one, the gun will shoot at the QR code.
+
+### GUI
+The GUI will likely be developed using rqt. It will include a manual control interface for steering the tank, as well as several buttons to switch between different modes. To provide a visual representation of the scanned room, the current live map will be displayed within the GUI. Additionally, the GUI will show the tank's current location, speed, and direction of movement.
+
+### Mapping
+The mapping process will be conducted in 2D. However, it's important to note that the map will not be saved after the tank is powered off.
+
 ## Architecture
 ### Structure
 The software will be roughly structured along these boundaries:
