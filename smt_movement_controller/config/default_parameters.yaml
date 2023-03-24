@@ -1,0 +1,2 @@
+vel_sub_topic_name: /cmd_vel
+vel_sub_queue_size: 10
