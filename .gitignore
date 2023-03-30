@@ -1,2 +1,10 @@
+# IDEs
 .idea
 .vscode
+
+# swap files of some editors
+*.swp
+*.swo
+
+# CMake (triggered through IDEs; ROS/catkin builds outside of the repository)
+cmake-build-*
