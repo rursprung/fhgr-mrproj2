@@ -112,7 +112,7 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        { }
       Update Interval: 0
       Value: false
     - Alpha: 1

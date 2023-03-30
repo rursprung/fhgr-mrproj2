@@ -99,10 +99,10 @@ find_package(catkin REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES fusion2urdf
-#  CATKIN_DEPENDS rospy
-#  DEPENDS system_lib
+        #  INCLUDE_DIRS include
+        #  LIBRARIES fusion2urdf
+        #  CATKIN_DEPENDS rospy
+        #  DEPENDS system_lib
 )
 
 ###########
