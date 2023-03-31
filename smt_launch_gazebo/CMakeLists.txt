@@ -100,10 +100,10 @@ find_package(catkin REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES tanky_launch_gazebo
-#  CATKIN_DEPENDS other_catkin_pkg
-#  DEPENDS system_lib
+        #  INCLUDE_DIRS include
+        #  LIBRARIES tanky_launch_gazebo
+        #  CATKIN_DEPENDS other_catkin_pkg
+        #  DEPENDS system_lib
 )
 
 ###########
@@ -184,9 +184,9 @@ catkin_package(
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 install(FILES
-  launch/default.launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
+        launch/default.launch
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+        )
 
 #############
 ## Testing ##
