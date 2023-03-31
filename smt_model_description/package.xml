@@ -43,6 +43,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>gazebo_ros</depend>
+  <depend>xacro</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
