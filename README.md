@@ -89,3 +89,55 @@ stateDiagram-v2
     S: QR Code Search
     G: Gun Mode (shoot at target)
 ```
+
+## Working With This Repository
+
+As this repository contains code for [ROS](https://ros.org/) (specifically, ROS noetic, the last 1.x release) and uses
+the [catkin](https://catkin-tools.readthedocs.io/en/latest/) build tool, you'll need to work in a catkin workspace.
+
+1. Source your ROS setup script (you should preferably add this to your `~/.profile`, esp. if you're working with an
+   IDE!)
+   ```bash
+   source /opt/ros/noetic/setup.bash
+   ```
+2. Create a new folder for your new catkin workspace (note: you can have multiple catkin workspaces in parallel and also
+   source all of their `setup.bash` files at the same time, that works fine):
+   ```bash
+   cd <wherever you want to have your workspace>
+   ```
+3. Clone this repository into the workspace and name the folder of the repository `src`:
+   ```bash
+   git clone git@github.com:rursprung/fhgr-mrproj2.git src
+   ```
+   (If you cloned it without specifying `src` at the end it'll create a folder named after the repository,
+   i.e. `fhgr-mrproj2` - just use `mv fhgr-mrproj2 src` to fix this).
+4. Install all required dependencies:
+   ```bash
+   rosdep install --from-paths . -i
+   ```
+5. Build the workspace & source its setup file:
+   ```bash
+   catkin build
+   source devel/setup.bash
+   ```
+6. Optional: when working with an IDE you should add the sourcing of the `setup.bash` of your workspace also to
+   your `~/.profile` (same as the one from ROS) so that it's set for all sessions and your IDE can access it!
+
+### Contributing To The Repository
+If you intend to contribute to the repository, please make sure that you're using a fork rather than working directly in the upstream repository!
+Follow the guide above to set up your repository and then:
+1. Create your fork on GitHub if you haven't done so already
+2. Go to your local clone of the repository:
+   ```bash
+   cd <your workspace>/src
+   ```
+3. Rename the remote `origin` to `upstream`:
+   ```bash
+   git remote rename origin upstream
+   ```
+4. Add your own fork:
+   ```bash
+   git remote add origin <your fork URL>
+   git fetch --all
+   ```
+5. Follow [the contribution guide](CONTRIBUTING.md) for further details.
