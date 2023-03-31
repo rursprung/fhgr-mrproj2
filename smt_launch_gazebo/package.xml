@@ -50,7 +50,7 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>gazebo_ros</depend>
+  <depend>smt_model_description</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
