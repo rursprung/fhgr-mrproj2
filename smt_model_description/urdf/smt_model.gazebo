@@ -54,10 +54,10 @@
   <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
     <updateRate>100.0</updateRate>
     <robotNamespace>/</robotNamespace>
-    <leftFrontJoint>Revolute 2</leftFrontJoint>
-    <leftRearJoint>Revolute 3</leftRearJoint>
-    <rightRearJoint>Revolute 4</rightRearJoint>
-    <rightFrontJoint>Revolute 5</rightFrontJoint>
+    <leftFrontJoint>Revolute_2</leftFrontJoint>
+    <leftRearJoint>Revolute_3</leftRearJoint>
+    <rightRearJoint>Revolute_4</rightRearJoint>
+    <rightFrontJoint>Revolute_5</rightFrontJoint>
     <wheelSeparation>0.201</wheelSeparation>
     <wheelDiameter>0.107</wheelDiameter>
     <robotBaseFrame>base_link</robotBaseFrame>
@@ -104,6 +104,44 @@
     </sensor>
   </gazebo>
 
-
-
+  <!-- camera -->
+  <gazebo reference="cam_1">
+    <sensor type="camera" name="camera1">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.18682389</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>1000</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>rrbot/camera1</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
 </robot>
