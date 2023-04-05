@@ -130,28 +130,49 @@
     </collision>
   </link>
 
-  <joint name="Revolute 2" type="continuous">
+  <link name="cam_1">
+    <inertial>
+      <origin xyz="0.001500000000000043 3.136830235032246e-13 1.3877787807814457e-17" rpy="0 0 0"/>
+      <mass value="0.000665860562928387"/>
+      <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.1005 0.0 -0.074" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://smt_model_description/meshes/cam_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.1005 0.0 -0.074" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://smt_model_description/meshes/cam_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="Revolute_2" type="continuous">
     <origin xyz="0.075 0.076 0.0535" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="wheel_left_front_1"/>
     <axis xyz="0.0 1.0 0.0"/>
   </joint>
 
-  <joint name="Revolute 3" type="continuous">
+  <joint name="Revolute_3" type="continuous">
     <origin xyz="-0.075 0.076 0.0535" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="wheel_left_back_1"/>
     <axis xyz="0.0 1.0 0.0"/>
   </joint>
 
-  <joint name="Revolute 4" type="continuous">
+  <joint name="Revolute_4" type="continuous">
     <origin xyz="-0.075 -0.076 0.0535" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="wheel_right_back_1"/>
     <axis xyz="0.0 1.0 0.0"/>
   </joint>
 
-  <joint name="Revolute 5" type="continuous">
+  <joint name="Revolute_5" type="continuous">
     <origin xyz="0.075 -0.076 0.0535" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="wheel_right_front_1"/>
@@ -162,6 +183,12 @@
     <origin xyz="-0.0675 0.0 0.159" rpy="0 0 0"/>
     <parent link="base_link"/>
     <child link="lidar_1"/>
+  </joint>
+
+  <joint name="Rigid 8" type="fixed">
+    <origin xyz="0.1005 0.0 0.074" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="cam_1"/>
   </joint>
 
 </robot>
