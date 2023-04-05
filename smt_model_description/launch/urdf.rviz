@@ -9,6 +9,7 @@ Panels:
         - /RobotModel1
         - /TF1
         - /LaserScan1
+        - /Image1
       Splitter Ratio: 0.550000011920929
     Tree Height: 251
   - Class: rviz/Selection
@@ -150,7 +151,7 @@ Visualization Manager:
       Value: true
     - Class: rviz/Image
       Enabled: true
-      Image Topic: /rrbot/camera1/image_raw
+      Image Topic: /camera1/image_raw
       Max Value: 1
       Median window: 5
       Min Value: 0
