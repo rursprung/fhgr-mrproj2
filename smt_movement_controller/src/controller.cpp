@@ -1,18 +1,37 @@
 #include <ros/ros.h>
-#include <wiringPi.h>
+#include <pigpio.h>
 #include <smt_movement_controller/controller.hpp>
 
-enum pin {pwm_left = 18,        //!< pwm motor Left
-          pwm_right = 19,       //!< pwm motor right
-          dir_left_1 = 1,       //!< direction pin left 1
-          dir_left_2 = 2,       //!< direction pin left 2
-          dir_rigt_1 = 3,       //!< direction pin right 1 
-          dir_right_2 = 4,      //!< direction pin right 2
+
+enum pin {pwm_left = 4,         //!< pwm motor Left (Pyhsical 7)
+          pwm_right = 5,        //!< pwm motor right (Physical 29)
+          dir_left_1 = 17,      //!< direction pin left 1 (Physical 11)
+          dir_left_2 = 27,      //!< direction pin left 2 (Physical 13)
+          dir_right_1 = 6,      //!< direction pin right 1 (Physical 31)
+          dir_right_2 = 13,     //!< direction pin right 2 (Physical 33)
           };
 
 const int PWM_FREQ = 20000;     //!< Hertz
 const int PWM_RANGE = 100;      //!< Range for pwm 0% to 100%
-const int PWM_CLOCK = 19.2e6;   //!< Pi PWM clock base frequency
+
+const int MAX_SPEED = 5;        //!< Max Speed for the cmd_vel
+
+
+double map(double value, double in_min, double in_max, double out_min, double out_max)
+{
+    double returnVal;
+    if(value < in_min){
+        returnVal = out_min;
+    }
+    else if(value > in_max){
+        returnVal = out_max;
+    }
+    else{
+        returnVal = (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
+    return returnVal;
+}
 
 namespace smt{
 
@@ -37,7 +56,13 @@ namespace smt{
         ROS_INFO("init done");
     }
 
-    void gpioController::scanCallback(const geometry_msgs::Twist::ConstPtr& velocity){
+    gpioController::~gpioController()
+    {
+        gpioTerminate();
+    }
+
+    void gpioController::scanCallback(const geometry_msgs::Twist::ConstPtr &velocity)
+    {
 
         double linear_x = velocity->linear.x;
         double angular_z = velocity->angular.z;
@@ -54,59 +79,68 @@ namespace smt{
     }
 
     void gpioController::PiInit(){
-        wiringPiSetup();
+        gpioTerminate();
+        setenv("PIGPIO_PORT", "8889", 1);
+        if (gpioInitialise() < 0){
+            ROS_ERROR("Fehler beim Initialisieren von pigpio!"); 
+            return;
+        }
+
 
         //PWMs
-        pinMode(pwm_left, PWM_OUTPUT);
-        pinMode(pwm_right, PWM_OUTPUT);
-        pwmSetMode(PWM_MODE_MS);
+        gpioSetMode(pwm_left, PI_OUTPUT);
+        gpioSetMode(pwm_right, PI_OUTPUT);
 
-        pwmSetRange(PWM_RANGE); // set range to 100
-        pwmSetClock((int)(PWM_CLOCK / (PWM_FREQ * PWM_RANGE)));
-        
+        gpioSetPWMfrequency(pwm_left, PWM_FREQ);
+        gpioSetPWMfrequency(pwm_right, PWM_FREQ);
+
+        gpioSetPWMrange(pwm_left, PWM_RANGE);
+        gpioSetPWMrange(pwm_right, PWM_RANGE);
+
         //GPIOs
-        pinMode(dir_left_1, OUTPUT);
-        pinMode(dir_left_2, OUTPUT);
-        pinMode(dir_rigt_1, OUTPUT);
-        pinMode(dir_right_2, OUTPUT);
+        gpioSetMode(dir_left_1, PI_OUTPUT);
+        gpioSetMode(dir_left_2, PI_OUTPUT);
+        gpioSetMode(dir_right_1, PI_OUTPUT);
+        gpioSetMode(dir_right_2, PI_OUTPUT);
+        
+        gpioWrite(dir_left_1, 0);
+        gpioWrite(dir_left_2, 0);
+        gpioWrite(dir_right_1, 0);
+        gpioWrite(dir_right_2, 0);
 
-        digitalWrite(dir_left_1, LOW);
-        digitalWrite(dir_left_2, LOW);
-        digitalWrite(dir_rigt_1, LOW);
-        digitalWrite(dir_right_2, LOW);
     }
 
     void gpioController::applyMotorSpeed(const double vLeft, const double vRight){
-    if(vLeft == 0){
-        digitalWrite(dir_left_1, LOW);
-        digitalWrite(dir_left_2, LOW);
-    }
-    else if(vLeft > 0){
-        digitalWrite(dir_left_1, LOW);
-        digitalWrite(dir_left_2, HIGH);
-    }
-    else{
-        digitalWrite(dir_left_1, HIGH);
-        digitalWrite(dir_left_2, LOW);
-    }
+        int pwm_val_left = map(abs(vLeft),0,MAX_SPEED,0,PWM_RANGE);
+        int pwm_val_right = map(abs(vRight),0,MAX_SPEED,0,PWM_RANGE);
 
-    if(vRight == 0){
-        digitalWrite(dir_rigt_1, LOW);
-        digitalWrite(dir_right_2, LOW);
-    }
-    else if(vRight > 0){
-        digitalWrite(dir_rigt_1, LOW);
-        digitalWrite(dir_right_2, HIGH);
-    }
-    else{
-        digitalWrite(dir_rigt_1, HIGH);
-        digitalWrite(dir_right_2, LOW);
-    }
+        if(vLeft == 0){
+            gpioWrite(dir_left_1, 0);
+            gpioWrite(dir_left_2, 0);
+        }
+        else if(vLeft > 0){
+            gpioWrite(dir_left_1, 0);
+            gpioWrite(dir_left_2, 1);
+        }
+        else{
+            gpioWrite(dir_left_1, 1);
+            gpioWrite(dir_left_2, 0);
+        }
 
+        if(vRight == 0){
+            gpioWrite(dir_right_1, 0);
+            gpioWrite(dir_right_2, 0);
+        }
+        else if(vRight > 0){
+            gpioWrite(dir_right_1, 0);
+            gpioWrite(dir_right_2, 1);
+        }
+        else{
+            gpioWrite(dir_right_1, 1);
+            gpioWrite(dir_right_2, 0);
+        }
+
+        gpioPWM(pwm_left, pwm_val_left);
+        gpioPWM(pwm_right, pwm_val_right);
+    }
 }
-
-}
-
-
-
-

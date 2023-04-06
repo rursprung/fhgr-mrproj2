@@ -12,7 +12,7 @@ namespace smt{
     class gpioController{
         public: 
             gpioController(ros::NodeHandle &nodeHandle);
-
+            ~gpioController();
             void scanCallback(const geometry_msgs::Twist::ConstPtr& velocity);
             void vel2motors(const double &linear, const double &angular);
 
