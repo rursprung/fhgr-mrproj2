@@ -191,4 +191,12 @@
     <child link="cam_1"/>
   </joint>
 
+  <joint name="camera_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+    <parent link="cam_1"/>
+    <child link="camera_link_optical"/>
+  </joint>
+
+  <link name="camera_link_optical" />
+
 </robot>
