@@ -2,12 +2,12 @@
 <package format="2">
   <name>smt_controller</name>
   <version>0.0.0</version>
-  <description>The smt_controller package</description>
+  <description>Main controller for the SMT. This contains the logic to steer the tank.</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="ralph@todo.todo">ralph</maintainer>
+  <maintainer email="ralph.ursprung@gmail.com">Ralph Ursprung</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
@@ -26,6 +26,7 @@
   <!-- Authors do not have to be maintainers, but could be -->
   <!-- Example: -->
   <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
+  <author email="ralph.ursprung@gmail.com">Ralph Ursprung</author>
 
 
   <!-- The *depend tags are used to specify dependencies -->

@@ -124,6 +124,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ../vendor/optional/include
 )
 
 ## Declare a C++ library
@@ -139,7 +140,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_node src/smt_controller_node.cpp src/SmtController.cpp)
+add_executable(${PROJECT_NAME}_node src/smt_controller_node.cpp src/SmtController.cpp src/PathFinder.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

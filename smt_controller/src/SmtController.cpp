@@ -5,6 +5,8 @@
 namespace smt {
     namespace controller {
 
+        const auto MIN_DISTANCE = 1.0f;
+
         SmtController::SmtController(const ros::NodeHandle &nodeHandle) : nodeHandle(nodeHandle) {
             std::string topic;
             if (!this->nodeHandle.getParam("scan_topic/topic", topic)) {
@@ -30,28 +32,36 @@ namespace smt {
         }
 
         void SmtController::scanCallback(const sensor_msgs::LaserScan &msg) {
-            // TODO
-            /*
-            const auto min = Algorithm::minimumDistance(msg.ranges, msg.range_min, msg.range_max);
-            if (min.has_value()) {
-                const auto angle = Algorithm::headingToNearestPoint(msg.ranges, *min, msg.angle_min, msg.angle_max,
-                                                                    msg.angle_increment);
+            if (!this->pathFinder.has_value()) {
+                // we get the ranges only with the first message, so we have to construct it here
+                ROS_INFO(
+                        "received first scan message, starting path finder with measurement range [%f..%f], angles [%f..%f] (increment: %f)",
+                        msg.range_min, msg.range_max, msg.angle_min, msg.angle_max, msg.angle_increment);
+                this->pathFinder.emplace(msg.range_min, msg.range_max, msg.angle_min, msg.angle_max,
+                                         msg.angle_increment, MIN_DISTANCE);
+            }
 
-                ROS_DEBUG("smallest distance measurement: %f with angle %f", *min, angle);
+            const auto newHeading = (*this->pathFinder).calculateNewHeading(msg.ranges);
 
-                if (this->state == Started) {
-                    if (*min > MIN_DISTANCE) {
-                        this->publishDriveTowardsCommand(*min, angle);
-                    } else {
-                        this->publishDriveStopCommand();
-                    }
-                }
+            if (newHeading.has_value()) {
+                ROS_DEBUG("new heading: %f", *newHeading);
+                this->publishDriveTowardsCommand(*newHeading);
             } else {
-                ROS_DEBUG("no distance measurement (nothing in sight)");
-
+                ROS_DEBUG("no new heading (nothing in sight)!");
                 this->publishDriveStopCommand();
             }
-             */
+        }
+
+        void SmtController::publishDriveTowardsCommand(const float angle) const {
+            geometry_msgs::Twist twist;
+            twist.linear.x = 2;
+            twist.angular.z = angle * 20;
+            this->velocityCommandPublisher.publish(twist);
+        }
+
+        void SmtController::publishDriveStopCommand() const {
+            const geometry_msgs::Twist twist;
+            this->velocityCommandPublisher.publish(twist);
         }
 
     } // smt
