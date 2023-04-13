@@ -1,0 +1,4 @@
+scan_topic:
+  topic: "/scan"
+  queue_size: 10
+cmd_vel_topic: "/cmd_vel"
