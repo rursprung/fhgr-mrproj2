@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(smt_camera_controller)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+## Compile as C++14
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+## By adding -Wall and -Werror, the compiler does not ignore warnings anymore,
+## enforcing cleaner code.
+add_definitions(-Wall -Werror)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -10,6 +15,7 @@ project(smt_camera_controller)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  cv_bridge
   roslint
 )
 
@@ -118,6 +124,15 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${PROJECT_SOURCE_DIR}/include
+  ${opencv4_INCLUDE_DIRS}
+  ${cv_bridge_INCLUDE_DIRS}
+)
+
+add_executable(
+  ${PROJECT_NAME}
+  src/smt_camera_controller.cpp
+  src/smt_camera_controller_node.cpp
 )
 
 ## Declare a C++ library
@@ -198,9 +213,13 @@ include_directories(
 
 ## Add gtest based cpp test target and link libraries
 # catkin_add_gtest(${PROJECT_NAME}-test test/test_smt_camera_controller.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+# Specify libraries to link a library or executable target againsts
+target_link_libraries(${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+  ${cv_bridge_LIBRARIES}
+  ${opencv4_LIBRARIES}
+  raspicam_cv
+)
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
