@@ -4,8 +4,13 @@ project(smt_movement_controller)
 ## Additional CMake Modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+## Compile as C++14
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+## By adding -Wall and -Werror, the compiler does not ignore warnings anymore,
+## enforcing cleaner code.
+# add_definitions(-Wall -Werror) # TODO @joel: enable & clean up build errors
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -13,6 +18,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  roslint
 )
 
 ## System dependencies are found with CMake's conventions
@@ -124,42 +130,34 @@ include_directories(
   ${pigpio_INCLUDE_DIR}
 )
 
-# Declare a C++ executable
-add_executable(
-  ${PROJECT_NAME}
-  src/controller.cpp
-  src/smt_movement_controller_node.cpp
-)
-
-## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/controller_gpio.cpp
-# )
-
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(${PROJECT_NAME} pigpio)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/controller_gpio_node.cpp)
+add_executable(
+  ${PROJECT_NAME}_node
+  src/controller.cpp
+  src/smt_movement_controller_node.cpp
+)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
 ## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
-# set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
+set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_node pigpio)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(
-  ${PROJECT_NAME} 
+  ${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
   ${pigpio_LIBRARIES}
 )
@@ -218,3 +216,9 @@ target_link_libraries(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+##########################
+## Static code analysis ##
+##########################
+
+roslint_cpp()
