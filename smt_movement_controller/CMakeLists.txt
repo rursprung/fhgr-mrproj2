@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(smt_movement_controller)
 
+## Additional CMake Modules
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 
@@ -14,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(pigpio REQUIRED)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -115,9 +119,9 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/include
+  ${catkin_INCLUDE_DIRS}
+  ${pigpio_INCLUDE_DIR}
 )
 
 # Declare a C++ executable
@@ -136,6 +140,7 @@ add_executable(
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME} pigpio)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
@@ -156,7 +161,7 @@ add_executable(
 target_link_libraries(
   ${PROJECT_NAME} 
   ${catkin_LIBRARIES}
-  pigpio
+  ${pigpio_LIBRARIES}
 )
 
 #############
