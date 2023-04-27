@@ -2,7 +2,7 @@
 
 <launch>   
   
-    <node name="smt_movement_controller" pkg="smt_movement_controller" type="smt_movement_controller" output="screen" launch-prefix="sudo">
+    <node name="smt_movement_controller" pkg="smt_movement_controller" type="node" output="screen" launch-prefix="sudo">
         <rosparam file="$(find smt_movement_controller)/config/default_parameters.yaml" command="load"/>
     </node>
 </launch>
