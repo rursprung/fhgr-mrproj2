@@ -21,6 +21,10 @@ find_package(catkin REQUIRED COMPONENTS
   roslint
 )
 
+## By adding -Wall and -Werror, the compiler does not ignore warnings anymore,
+## enforcing cleaner code.
+add_definitions(-Wall -Werror)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 find_package(pigpio REQUIRED)
@@ -140,7 +144,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(
   ${PROJECT_NAME}_node
-  src/controller.cpp
+  src/gpio_controller.cpp
+  src/movement_controller.cpp
   src/smt_movement_controller_node.cpp
 )
 
