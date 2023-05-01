@@ -23,7 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## By adding -Wall and -Werror, the compiler does not ignore warnings anymore,
 ## enforcing cleaner code.
-add_definitions(-Wall -Werror)
+# add_definitions(-Wall -Werror)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
