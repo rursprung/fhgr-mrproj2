@@ -149,3 +149,11 @@ Follow the guide above to set up your repository and then:
    git fetch --all
    ```
 5. Follow [the contribution guide](CONTRIBUTING.md) for further details.
+
+### Running The Code
+After building the project you can run the simulated robot using:
+```bash
+roslaunch smt_launch_gazebo default.launch
+```
+
+You can use the arrow keys to navigate in the world.
