@@ -107,13 +107,21 @@ the [catkin](https://catkin-tools.readthedocs.io/en/latest/) build tool, you'll 
    ```
 3. Clone this repository into the workspace and name the folder of the repository `src`:
    ```bash
-   git clone git@github.com:rursprung/fhgr-mrproj2.git src
+   git clone --recurse-submodules git@github.com:rursprung/fhgr-mrproj2.git src
    ```
-   (If you cloned it without specifying `src` at the end it'll create a folder named after the repository,
-   i.e. `fhgr-mrproj2` - just use `mv fhgr-mrproj2 src` to fix this).
+   Notes:
+   * If you cloned it without specifying `src` at the end it'll create a folder named after the repository,
+     i.e. `fhgr-mrproj2` - just use `mv fhgr-mrproj2 src` to fix this.
+   * If you cloned it without specifying `--recurse-submodules` you can still manually init the submodules:
+     ```bash
+     git submodule init
+     git submodule update
+     ```
 4. Install all required dependencies:
    ```bash
    rosdep install --from-paths . -i
+
+   sudo pip install pynput # see https://github.com/ethz-asl/better_teleop for more details
    ```
 5. Build the workspace & source its setup file:
    ```bash
