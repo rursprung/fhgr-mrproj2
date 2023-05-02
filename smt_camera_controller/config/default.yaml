@@ -1,0 +1,8 @@
+camera: 
+  chip:
+    width: 640
+    height: 480
+  fps: 10
+img_pub_topic:
+  topic: /image_raw
+  queue_size: 10

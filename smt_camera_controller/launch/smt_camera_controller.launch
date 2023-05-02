@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-  <node name = "smt_camera_controller" pkg = "smt_camera_controller" type = "smt_camera_controller" output="screen"> 
-    <rosparam file="$(find smt_camera_controller)/config/default_parameters.yaml" command="load"/>
-  </node>
-</launch>
