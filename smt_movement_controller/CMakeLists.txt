@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ## By adding -Wall and -Werror, the compiler does not ignore warnings anymore,
 ## enforcing cleaner code.
-# add_definitions(-Wall -Werror) # TODO @joel: enable & clean up build errors
+add_definitions(-Wall -Werror -Wno-error=comment) 
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -20,10 +20,6 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   roslint
 )
-
-## By adding -Wall and -Werror, the compiler does not ignore warnings anymore,
-## enforcing cleaner code.
-# add_definitions(-Wall -Werror)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
