@@ -32,63 +32,65 @@ const double MAX_SPEED = 0.715;  //!< m/s measured
  */
 double map(double value, double in_min, double in_max, double out_min, double out_max) {
     if (value < in_min) {
-        ROS_WARN("Reached smallest posible value, return value set to out_min Value: %f", out_min);
+        ROS_WARN("Reached smallest possible value, return value set to out_min Value: %f", out_min);
         return out_min;
-    } else if (value > in_max) {
-        ROS_WARN("Reached heighest posible value, return value set to out_max Value: %f", out_max);
+    }
+    else if (value > in_max) {
+        ROS_WARN("Reached highest possible value, return value set to out_max Value: %f", out_max);
         return out_max;
-    } else {
+    }
+    else {
         return (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 }
 
 namespace smt {
 
-namespace gpio_controller {
+    namespace gpio_controller {
 
-void initPi() {
-    setenv("PIGPIO_PORT", "8889", 1);
-    if (gpioInitialise() < 0) {
-        throw std::runtime_error("error while trying to initialize pigpio!");
-        return;
-    }
+        void initPi() {
+            setenv("PIGPIO_PORT", "8889", 1);
+            if (gpioInitialise() < 0) {
+                throw std::runtime_error("error while trying to initialize pigpio!");
+                return;
+            }
 
-    // PWMs
-    gpioSetMode(static_cast<uint>(Pin::PWM_LEFT), PI_OUTPUT);
-    gpioSetMode(static_cast<uint>(Pin::PWM_RIGHT), PI_OUTPUT);
+            // PWMs
+            gpioSetMode(static_cast<uint>(Pin::PWM_LEFT), PI_OUTPUT);
+            gpioSetMode(static_cast<uint>(Pin::PWM_RIGHT), PI_OUTPUT);
 
-    gpioSetPWMfrequency(static_cast<uint>(Pin::PWM_LEFT), PWM_FREQ);
-    gpioSetPWMfrequency(static_cast<uint>(Pin::PWM_RIGHT), PWM_FREQ);
+            gpioSetPWMfrequency(static_cast<uint>(Pin::PWM_LEFT), PWM_FREQ);
+            gpioSetPWMfrequency(static_cast<uint>(Pin::PWM_RIGHT), PWM_FREQ);
 
-    gpioSetPWMrange(static_cast<uint>(Pin::PWM_LEFT), PWM_RANGE);
-    gpioSetPWMrange(static_cast<uint>(Pin::PWM_RIGHT), PWM_RANGE);
+            gpioSetPWMrange(static_cast<uint>(Pin::PWM_LEFT), PWM_RANGE);
+            gpioSetPWMrange(static_cast<uint>(Pin::PWM_RIGHT), PWM_RANGE);
 
-    // GPIOs
-    gpioSetMode(static_cast<uint>(Pin::DIR_LEFT_1), PI_OUTPUT);
-    gpioSetMode(static_cast<uint>(Pin::DIR_LEFT_2), PI_OUTPUT);
-    gpioSetMode(static_cast<uint>(Pin::DIR_RIGHT_1), PI_OUTPUT);
-    gpioSetMode(static_cast<uint>(Pin::DIR_RIGHT_2), PI_OUTPUT);
+            // GPIOs
+            gpioSetMode(static_cast<uint>(Pin::DIR_LEFT_1), PI_OUTPUT);
+            gpioSetMode(static_cast<uint>(Pin::DIR_LEFT_2), PI_OUTPUT);
+            gpioSetMode(static_cast<uint>(Pin::DIR_RIGHT_1), PI_OUTPUT);
+            gpioSetMode(static_cast<uint>(Pin::DIR_RIGHT_2), PI_OUTPUT);
 
-    gpioWrite(static_cast<uint>(Pin::DIR_LEFT_1), 0);
-    gpioWrite(static_cast<uint>(Pin::DIR_LEFT_2), 0);
-    gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_1), 0);
-    gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_2), 0);
-}
+            gpioWrite(static_cast<uint>(Pin::DIR_LEFT_1), 0);
+            gpioWrite(static_cast<uint>(Pin::DIR_LEFT_2), 0);
+            gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_1), 0);
+            gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_2), 0);
+        }
 
-void applyMotorSpeed(const double vLeft, const double vRight) {
-    int pwm_val_left = map(abs(vLeft), 0, MAX_SPEED, 0, PWM_RANGE);
-    int pwm_val_right = map(abs(vRight), 0, MAX_SPEED, 0, PWM_RANGE);
+        void applyMotorSpeed(const double vLeft, const double vRight) {
+            int pwm_val_left = map(abs(vLeft), 0, MAX_SPEED, 0, PWM_RANGE);
+            int pwm_val_right = map(abs(vRight), 0, MAX_SPEED, 0, PWM_RANGE);
 
-    gpioWrite(static_cast<uint>(Pin::DIR_LEFT_1), vLeft < 0 ? 1 : 0);
-    gpioWrite(static_cast<uint>(Pin::DIR_LEFT_2), vLeft > 0 ? 1 : 0);
+            gpioWrite(static_cast<uint>(Pin::DIR_LEFT_1), vLeft < 0 ? 1 : 0);
+            gpioWrite(static_cast<uint>(Pin::DIR_LEFT_2), vLeft > 0 ? 1 : 0);
 
-    gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_1), vRight < 0 ? 0 : 1);
-    gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_2), vRight > 0 ? 0 : 1);
+            gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_1), vRight < 0 ? 0 : 1);
+            gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_2), vRight > 0 ? 0 : 1);
 
-    gpioPWM(static_cast<uint>(Pin::PWM_LEFT), pwm_val_left);
-    gpioPWM(static_cast<uint>(Pin::PWM_RIGHT), pwm_val_right);
-}
+            gpioPWM(static_cast<uint>(Pin::PWM_LEFT), pwm_val_left);
+            gpioPWM(static_cast<uint>(Pin::PWM_RIGHT), pwm_val_right);
+        }
 
-}  // namespace gpio_controller
+    }  // namespace gpio_controller
 
 }  // namespace smt
