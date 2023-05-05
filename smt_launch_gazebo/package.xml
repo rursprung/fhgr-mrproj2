@@ -51,7 +51,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <depend>smt_model_description</depend>
-
+  <exec_depend>better_teleop</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

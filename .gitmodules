@@ -1,0 +1,3 @@
+[submodule "vendor/better_teleop"]
+	path = vendor/better_teleop
+	url = https://github.com/ethz-asl/better_teleop.git
