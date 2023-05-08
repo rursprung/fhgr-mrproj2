@@ -1,0 +1,3 @@
+cmd_vel_topic:
+  topic: /cmd_vel
+  queue_size: 10
