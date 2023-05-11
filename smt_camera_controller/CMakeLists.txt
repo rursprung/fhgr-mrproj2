@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(smt_camera_controller)
 
+## Additional CMake Modules
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+
 ## Compile as C++14
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,10 +22,9 @@ find_package(catkin REQUIRED COMPONENTS
   roslint
 )
 
-#find_package(raspicam REQUIRED)
-
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(raspicam REQUIRED)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -129,6 +131,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${opencv4_INCLUDE_DIRS}
   ${cv_bridge_INCLUDE_DIRS}
+  ${raspicam_INCLUDE_DIR}
 )
 
 ## Declare a C++ library
@@ -160,13 +163,14 @@ set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX ""
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAMEs}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_node raspicam)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
   ${cv_bridge_LIBRARIES}
   ${opencv4_LIBRARIES}
-  raspicam_cv
+  ${raspicam_LIBRARIES}
 )
 
 #############
