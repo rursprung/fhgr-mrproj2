@@ -2,12 +2,12 @@
 #include <ros/ros.h>
 
 #include "smt_movement_controller/movement_controller.hpp"
-#include "smt_movement_controller/gpio_controller.hpp"
+#include "gpio_controller.hpp"
 
 namespace smt {
     namespace movement_controller {
-        MovementController::MovementController(ros::NodeHandle& nodeHandle) {
-            ros::NodeHandle nodeHandle = nodeHandle;
+        MovementController::MovementController(ros::NodeHandle& nodeHandle_) {
+            ros::NodeHandle nodeHandle = nodeHandle_;
             std::string velTopic;
             int subscriberQueueSize;
             if (!nodeHandle.getParam("cmd_vel_topic/topic", velTopic)) {
@@ -20,7 +20,7 @@ namespace smt {
                 ros::requestShutdown();
             }
 
-            velSubscriber = nodeHandle.subscribe(velTopic_, subscriberQueueSize_, &MovementController::velocityCommandCallback, this);
+            velSubscriber = nodeHandle.subscribe(velTopic, subscriberQueueSize, &MovementController::velocityCommandCallback, this);
             ROS_INFO("starting subscriber for %s with queue size %i", velTopic.c_str(), subscriberQueueSize);
 
             smt::gpio_controller::initPi();

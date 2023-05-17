@@ -10,7 +10,7 @@ namespace smt {
 
         class MovementController {
         public:
-            MovementController(ros::NodeHandle& nodeHandle);
+            MovementController(ros::NodeHandle& nodeHandle_);
             ~MovementController();
             void velocityCommandCallback(const geometry_msgs::Twist::ConstPtr& velocity) const;
             std::pair<double, double> mapRobotVelocityToMotorSpeed(const double& linear_speed, const double& angular_speed) const;
