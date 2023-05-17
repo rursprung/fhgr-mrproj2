@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>   
+    <node name="smt_gun_controller" pkg="smt_gun_controller" type="node" output="screen" launch-prefix="sudo">
+        <rosparam file="$(find smt_gun_controller)/config/default.yaml" command="load"/>
+    </node>
+</launch>
