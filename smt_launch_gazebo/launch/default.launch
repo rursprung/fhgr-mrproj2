@@ -6,4 +6,6 @@
   <node name="better_teleop" pkg="better_teleop" type="better_teleop.py" output="screen"/>
 
   <include file="$(find smt_model_description)/launch/gazebo.launch"/>
+
+  <include file="$(find smt_slam)/launch/default.launch"/>
 </launch>

@@ -52,7 +52,9 @@
   <buildtool_depend>catkin</buildtool_depend>
   <depend>smt_camera_controller</depend>
   <depend>smt_movement_controller</depend>
+  <exec_depend>smt_slam</exec_depend>
   <exec_depend>rplidar_ros</exec_depend>
+
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
