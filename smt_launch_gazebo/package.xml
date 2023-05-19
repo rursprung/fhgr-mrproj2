@@ -50,7 +50,7 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>smt_model_description</depend>
+  <exec_depend>smt_model_description</exec_depend>
   <exec_depend>better_teleop</exec_depend>
   <exec_depend>smt_slam</exec_depend>
 
