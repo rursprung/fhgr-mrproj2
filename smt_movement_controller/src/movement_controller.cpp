@@ -2,12 +2,11 @@
 #include <ros/ros.h>
 
 #include "smt_movement_controller/movement_controller.hpp"
-#include "gpio_controller.hpp"
+#include "smt_movement_controller/gpio_controller.hpp"
 
 namespace smt {
     namespace movement_controller {
-        MovementController::MovementController(ros::NodeHandle& nodeHandle_) {
-            ros::NodeHandle nodeHandle = nodeHandle_;
+        MovementController::MovementController(ros::NodeHandle& nodeHandle) {
             std::string velTopic;
             int subscriberQueueSize;
             if (!nodeHandle.getParam("cmd_vel_topic/topic", velTopic)) {
