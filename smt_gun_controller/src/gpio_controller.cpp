@@ -9,17 +9,36 @@ enum class Pin
     PWM_SERVO = 12,   //!< pwm motor right (Physical 32)
 };
 
-namespace smt
-{
-    namespace gpio_controller
-    {
-        void initPi(const int initialPulseWidh)
-        {
-            setenv("PIGPIO_PORT", "8889", 1);
-            if (gpioInitialise() < 0)
-            {
-                throw std::runtime_error("error while trying to initialize pigpio!");
-                return;
+bool isNodeRunning(const std::string& nodeName) {
+    std::string callerId = ros::this_node::getName();
+    std::string nodeNamespace = ros::names::parentNamespace(callerId);
+
+    std::string resolvedNodeName = ros::names::resolve(nodeNamespace, nodeName);
+
+    ros::V_string nodes;
+    ros::master::getNodes(nodes);
+
+    for (const auto& node : nodes) {
+        if (node == resolvedNodeName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+namespace smt {
+
+    namespace gpio_controller {
+
+        void initPi(const int initialPulseWidh) {
+            //Check if gpio library allready initialised
+            if (!isNodeRunning("/smt_movement_controller")) {
+                setenv("PIGPIO_PORT", "8889", 1);
+                if (gpioInitialise() < 0)
+                {
+                    throw std::runtime_error("error while trying to initialize pigpio!");
+                    return;
+                }
             }
 
             // PWMs
@@ -30,13 +49,11 @@ namespace smt
             gpioWrite(static_cast<uint>(Pin::GUN_TRIGGER), 1);
         }
 
-        void setServoHeight(const int pulseWidth)
-        {
+        void setServoHeight(const int pulseWidth) {
             gpioServo(static_cast<uint>(Pin::PWM_SERVO), pulseWidth);
         }
 
-        void fireOneShot()
-        {
+        void fireOneShot() {
             gpioWrite(static_cast<uint>(Pin::GUN_TRIGGER), 0);
             ros::Duration(0.1).sleep();
             gpioWrite(static_cast<uint>(Pin::GUN_TRIGGER), 1);

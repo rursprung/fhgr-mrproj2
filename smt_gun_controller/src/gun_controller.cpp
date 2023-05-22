@@ -19,41 +19,36 @@ const int initializationPulseWidth = 1400;
  *
  * @return an integer value which represents the pulsewidth calculated based on the input pipe angle.
  */
-int getPulsewidthFromPipeAngle(const int pipeAngle)
-{
-    if (pipeAngle < negativePipeLimitation)
-    {
+int getPulsewidthFromPipeAngle(const int pipeAngle) {
+    if (pipeAngle < negativePipeLimitation) {
         ROS_WARN("reached minimum angle limitiation (-15 deg), setting angle to -15 deg");
         return negativePulsewidthLimitation;
     }
-    if (pipeAngle > positivePipeLimitation)
-    {
+
+    if (pipeAngle > positivePipeLimitation) {
         ROS_WARN("reached maximum angle limitiation (50 deg), setting angle to 50 deg");
         return positivePulsewidthLimitation;
     }
+
     return (pipeAngle - negativePipeLimitation) *
-               (positivePulsewidthLimitation - negativePulsewidthLimitation) /
-               (positivePipeLimitation - negativePipeLimitation) +
-           negativePulsewidthLimitation;
+        (positivePulsewidthLimitation - negativePulsewidthLimitation) /
+        (positivePipeLimitation - negativePipeLimitation) +
+        negativePulsewidthLimitation;
 }
 
-namespace smt
-{
-    namespace gun_controller
-    {
-        GunController::GunController(ros::NodeHandle &nodeHandle_)
-        {
-            ros::NodeHandle nodeHandle = nodeHandle_;
+namespace smt {
+
+    namespace gun_controller {
+
+        GunController::GunController(ros::NodeHandle& nodeHandle) {
             std::string gunTopic;
             int subscriberQueueSize;
-            if (!nodeHandle.getParam("gun_controller_topic/topic", gunTopic))
-            {
+            if (!nodeHandle.getParam("gun_controller_topic/topic", gunTopic)) {
                 ROS_ERROR("failed to load the `gun_controller_topic/topic` parameter!");
                 ros::requestShutdown();
             }
 
-            if (!nodeHandle.getParam("gun_controller_topic/queue_size", subscriberQueueSize))
-            {
+            if (!nodeHandle.getParam("gun_controller_topic/queue_size", subscriberQueueSize)) {
                 ROS_ERROR("failed to load the `gun_controller_topic/queue_size` parameter!");
                 ros::requestShutdown();
             }
@@ -65,36 +60,34 @@ namespace smt
             ROS_INFO("init done");
         }
 
-        GunController::~GunController()
-        {
+        GunController::~GunController() {
             gpioTerminate();
         }
 
-        void GunController::gunCommandCallback(const std_msgs::Int32::ConstPtr &gunAngle)
-        {
+        void GunController::gunCommandCallback(const std_msgs::Int32::ConstPtr& gunAngle) {
             int targetPulsewidth = getPulsewidthFromPipeAngle(gunAngle->data);
             int step = targetPulsewidth > initializationPulseWidth ? 1 : -1;
             int currentPulsewidth = initializationPulseWidth;
 
             // Gradually increase servo pulse widths to obtain smoother movement
-            for (size_t i = 0; i < abs(targetPulsewidth - initializationPulseWidth); i++)
-            {
+            for (size_t i = 0; i < abs(targetPulsewidth - initializationPulseWidth); i++) {
                 currentPulsewidth = initializationPulseWidth + i * step;
                 smt::gpio_controller::setServoHeight(currentPulsewidth);
                 ros::Duration(0.002).sleep();
             }
-            ROS_INFO("Ziel höhe erreicht!");
+
             ros::Duration(0.5).sleep();
             smt::gpio_controller::fireOneShot();
             ros::Duration(0.5).sleep();
 
-            for (size_t i = abs(targetPulsewidth - initializationPulseWidth); i > 0; i--)
-            {
+            for (size_t i = abs(targetPulsewidth - initializationPulseWidth); i > 0; i--) {
                 currentPulsewidth = initializationPulseWidth + i * step;
                 smt::gpio_controller::setServoHeight(currentPulsewidth);
                 ros::Duration(0.002).sleep();
             }
+
         }
 
     } // namespace movement_controller
+
 } // namespace smt

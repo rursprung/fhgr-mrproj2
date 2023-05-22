@@ -4,18 +4,16 @@
 #include <ros/ros.h>
 #include <std_msgs/Int32.h>
 
-namespace smt
-{
+namespace smt {
 
-    namespace gun_controller
-    {
+    namespace gun_controller {
 
-        class GunController
-        {
+        class GunController {
+
         public:
-            GunController(ros::NodeHandle &nodeHandle_);
+            GunController(ros::NodeHandle& nodeHandle);
             ~GunController();
-            void gunCommandCallback(const std_msgs::Int32::ConstPtr &gunAngle);
+            void gunCommandCallback(const std_msgs::Int32::ConstPtr& gunAngle);
 
         private:
             ros::Subscriber gunSubscriber;
