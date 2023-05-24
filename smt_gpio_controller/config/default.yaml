@@ -1,0 +1,3 @@
+gpio_topic:
+  topic: /cmd_gpio
+  queue_size: 10

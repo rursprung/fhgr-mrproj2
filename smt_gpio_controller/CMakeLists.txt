@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(smt_movement_controller)
+project(smt_gpio_controller)
 
+## Additional CMake Modules
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 
 ## Compile as C++14
 set(CMAKE_CXX_STANDARD 14)
@@ -22,8 +24,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
-
+find_package(pigpio REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -111,7 +112,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES controller_gpio
+#  LIBRARIES smt_gun_controller
   CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
@@ -125,7 +126,13 @@ catkin_package(
 include_directories(
   ${PROJECT_SOURCE_DIR}/include
   ${catkin_INCLUDE_DIRS}
+  ${pigpio_INCLUDE_DIR}
 )
+
+## Declare a C++ library
+# add_library(${PROJECT_NAME}
+#   src/${PROJECT_NAME}/smt_gpio_controller.cpp
+# )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -137,8 +144,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(
   ${PROJECT_NAME}_node
-  src/movement_controller.cpp
-  src/smt_movement_controller_node.cpp
+  src/gpio_controller.cpp
+  src/smt_gpio_controller_node.cpp
 )
 
 ## Rename C++ executable without prefix
@@ -150,11 +157,14 @@ set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX ""
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}_node pigpio)
+
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(
   ${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
+  ${pigpio_LIBRARIES}
 )
 
 #############
@@ -204,16 +214,12 @@ target_link_libraries(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_controller_gpio.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_smt_gpio_controller.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-##########################
-## Static code analysis ##
-##########################
 
 roslint_cpp()

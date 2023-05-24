@@ -1,3 +1,7 @@
 cmd_vel_topic:
   topic: /cmd_vel
   queue_size: 10
+
+gpio_topic:
+  topic: /cmd_gpio
+  queue_size: 10

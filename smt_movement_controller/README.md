@@ -1,3 +1,3 @@
 # SMT Movement Controller
 
-This ROS package includes a ROS node designed to operate on a Raspberry Pi 4b, allowing the user to control GPIOs and adjust velocity accordingly. The [pigpio](https://abyz.me.uk/rpi/pigpio/) library is used for setting the GPIOs.
+This ROS package includes a ROS node designed to operate on a Raspberry Pi 4b, allowing the user to adjust velocity accordingly. To use this package, the smt_gpio_controller must be started before this package!
