@@ -1,9 +1,8 @@
-
 #include <ros/ros.h>
 
 #include "smt_movement_controller/movement_controller.hpp"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     ros::init(argc, argv, "smt_movement_controller", ros::init_options::NoSigintHandler);
     ros::NodeHandle nodeHandle("~");
 

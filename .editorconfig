@@ -8,6 +8,7 @@ indent_style = space
 insert_final_newline = true
 max_line_length = 120
 tab_width = 2
+cpp_indent_namespace_contents = true
 
 [*.{cpp,hpp,c,h}]
 indent_size = 4
