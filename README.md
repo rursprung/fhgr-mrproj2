@@ -151,9 +151,22 @@ Follow the guide above to set up your repository and then:
 5. Follow [the contribution guide](CONTRIBUTING.md) for further details.
 
 ### Running The Code
+#### Simulation
 After building the project you can run the simulated robot using:
 ```bash
 roslaunch smt_launch_gazebo default.launch
 ```
 
 You can use the arrow keys to navigate in the world.
+
+#### On the Robot
+To run the code on the robot you initially need to set up the udev rules for the LIDAR:
+```bash
+$(rospack find rplidar_ros)/scripts/create_udev_rules.sh
+```
+This only needs to be done once.
+
+Afterward you can launch the on the robot:
+```bash
+roslaunch smt_launch_hardware default.launch
+```

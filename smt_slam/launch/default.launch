@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="geotiff_map_file_path" default="$(find smt_slam)/maps"/>
+
+  <include file="$(find hector_mapping)/launch/mapping_default.launch">
+    <arg name="base_frame" value="base_link"/>
+    <arg name="odom_frame" value="base_link"/>
+  </include>
+
+  <include file="$(find hector_geotiff_launch)/launch/geotiff_mapper.launch">
+    <arg name="trajectory_source_frame_name" value="scanmatcher_frame"/>
+    <arg name="map_file_path" value="$(arg geotiff_map_file_path)"/>
+  </include>
+</launch>
