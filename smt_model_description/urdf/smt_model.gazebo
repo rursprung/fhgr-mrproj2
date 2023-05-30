@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <robot name="smt_model" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:arg name="simulation" default="false"/>
+
   <xacro:property name="body_color" value="Gazebo/Silver"/>
 
   <gazebo>
@@ -95,11 +97,13 @@
           <stddev>0.01</stddev>
         </noise>
       </ray>
-      <plugin name="laser_controller" filename="libgazebo_ros_laser.so">
-        <topicName>/scan</topicName>
-        <output_type>sensor_msgs/LaserScan</output_type>
-        <frameName>lidar_1</frameName>
-      </plugin>
+      <xacro:if value="$(arg simulation)">
+        <plugin name="laser_controller" filename="libgazebo_ros_laser.so">
+          <topicName>/scan</topicName>
+          <output_type>sensor_msgs/LaserScan</output_type>
+          <frameName>lidar_1</frameName>
+        </plugin>
+      </xacro:if>
     </sensor>
   </gazebo>
 
@@ -127,20 +131,22 @@
           <stddev>0.007</stddev>
         </noise>
       </camera>
-      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <cameraName>camera1</cameraName>
-        <imageTopicName>image_raw</imageTopicName>
-        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>camera_link_optical</frameName>
-        <hackBaseline>0.07</hackBaseline>
-        <distortionK1>0.0</distortionK1>
-        <distortionK2>0.0</distortionK2>
-        <distortionK3>0.0</distortionK3>
-        <distortionT1>0.0</distortionT1>
-        <distortionT2>0.0</distortionT2>
-      </plugin>
+      <xacro:if value="$(arg simulation)">
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>camera1</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>camera_link_optical</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </xacro:if>
     </sensor>
   </gazebo>
 
@@ -152,16 +158,18 @@
       <update_rate>100</update_rate>
       <visualize>true</visualize>
       <topic>_default_topic_</topic>
-      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-        <topicName>imu/data</topicName>
-        <bodyName>IMU_1</bodyName>
-        <updateRateHZ>100.0</updateRateHZ>
-        <gaussianNoise>0.0</gaussianNoise>
-        <xyzOffset>0 0 0</xyzOffset>
-        <rpyOffset>0 0 0</rpyOffset>
-        <frameName>IMU_1</frameName>
-        <initialOrientationAsReference>false</initialOrientationAsReference>
-      </plugin>
+      <xacro:if value="$(arg simulation)">
+        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+          <topicName>imu/data</topicName>
+          <bodyName>IMU_1</bodyName>
+          <updateRateHZ>100.0</updateRateHZ>
+          <gaussianNoise>0.0</gaussianNoise>
+          <xyzOffset>0 0 0</xyzOffset>
+          <rpyOffset>0 0 0</rpyOffset>
+          <frameName>IMU_1</frameName>
+          <initialOrientationAsReference>false</initialOrientationAsReference>
+        </plugin>
+      </xacro:if>
       <pose>0 0 0 0 0 0</pose>
     </sensor>
   </gazebo>

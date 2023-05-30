@@ -9,7 +9,9 @@
     <rosparam param="rotation_rate">0.5</rosparam>
   </node>
 
-  <include file="$(find smt_launch_common)/launch/default.launch"/>
+  <include file="$(find smt_launch_common)/launch/default.launch">
+    <arg name="simulation" value="true"/>
+  </include>
 
   <include file="$(find smt_model_description)/launch/gazebo.launch"/>
 </launch>
