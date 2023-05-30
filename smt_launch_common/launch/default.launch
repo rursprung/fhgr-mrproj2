@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <launch>
+  <include file="$(find smt_model_description)/launch/model.launch"/>
   <include file="$(find smt_slam)/launch/default.launch"/>
 </launch>
