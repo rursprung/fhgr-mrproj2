@@ -1,0 +1,27 @@
+# see https://docs.ros.org/en/noetic/api/robot_localization/html/configuring_robot_localization.html
+
+map_frame: map
+odom_frame: odom
+base_link_frame: base_link
+world_frame: odom
+
+two_d_mode: true
+
+frequency: 50
+
+pose0: /poseupdate
+pose0_config: [true , true , true , # x,y,z: no absolute position provided by the IMU
+               false, false, false, # roll,pitch,yaw
+               false, false, false, # x velocity,y velocity,z velocity
+               false, false, false, # roll velocity,pitch velocity,yaw velocity
+               false, false, false] # x acceleration,y acceleration,z acceleration
+pose0_queue_size: 10
+
+imu0: /imu
+imu0_config: [false, false, false, # x,y,z: no absolute position provided by the IMU
+              true , true , true , # roll,pitch,yaw
+              true , true , true , # x velocity,y velocity,z velocity
+              true , true , true , # roll velocity,pitch velocity,yaw velocity
+              true , true , true ] # x acceleration,y acceleration,z acceleration
+imu0_queue_size: 10
+# imu0_remove_gravitational_acceleration handled in the launch file!

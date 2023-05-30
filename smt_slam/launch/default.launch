@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
 <launch>
+  <!-- odometry -->
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
+    <rosparam command="load" file="$(find smt_slam)/config/localization.yaml" />
+  </node>
+
+  <!-- SLAM -->
   <arg name="geotiff_map_file_path" default="$(find smt_slam)/maps"/>
 
   <include file="$(find hector_mapping)/launch/mapping_default.launch">
     <arg name="base_frame" value="base_link"/>
-    <arg name="odom_frame" value="base_link"/>
+    <arg name="odom_frame" value="odom"/>
   </include>
 
   <include file="$(find hector_geotiff_launch)/launch/geotiff_mapper.launch">

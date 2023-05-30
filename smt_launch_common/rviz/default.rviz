@@ -64,6 +64,11 @@ Visualization Manager:
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
+        IMU_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         Link Tree Style: Links in Alphabetic Order
         base_link:
           Alpha: 1
@@ -181,7 +186,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -243,5 +248,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1378
-  X: 30
-  Y: -5
+  X: 179
+  Y: -24
