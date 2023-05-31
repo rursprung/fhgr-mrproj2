@@ -51,11 +51,9 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <buildtool_depend>roslint</buildtool_depend>
-  <buildtool_depend>message_generation</buildtool_depend>
-  <exec_depend>message_runtime</exec_depend>
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
-  
+  <depend>smt_gpio_controller</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

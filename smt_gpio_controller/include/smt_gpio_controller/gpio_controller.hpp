@@ -5,10 +5,6 @@
 
 #include "smt_gpio_controller/gpio.h"
 
-void initPiGunGpio(const int initialPulseWidh);
-void setServoHeight(const int pulseWidth);
-void fireOneShot();
-
 namespace smt {
 
     namespace gpio_controller {
@@ -17,13 +13,17 @@ namespace smt {
         public:
             GpioController(ros::NodeHandle& nodeHandle);
             ~GpioController();
-            void initPi() const;
-            void gpioCommandCallback(const smt_gpio_controller::gpio& gpioSettings) const;
 
         private:
             ros::Subscriber gpioSubscriber;
-        };
 
+            void initPi() const;
+            void gpioCommandCallback(const smt_gpio_controller::gpio& gpioSettings) const;
+            void handlePwmUpdate(const uint8_t gpio, const uint32_t value) const;
+            void handleServoUpdate(const uint8_t gpio, const uint32_t value) const;
+            void handleGpioUpdate(const uint8_t gpio, const uint32_t value) const;
+
+        };
 
     } // namespace gpio_controller
 

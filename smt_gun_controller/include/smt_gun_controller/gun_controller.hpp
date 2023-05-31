@@ -10,16 +10,16 @@ namespace smt {
 
         public:
             GunController(ros::NodeHandle& nodeHandle);
-            ~GunController();
-            void gunCommandCallback(const std_msgs::Int32::ConstPtr& gunAngle) const;
-            void initGunGPIO() const;
-            void setServoHeight(const int pulsewidth) const;
-            void fireOneShot() const;
-            void generatePublisherMsg(const uint gpio, const std::string mode, const int value) const;
 
         private:
             ros::Subscriber gunSubscriber;
             ros::Publisher gpioPublisher;
+
+            void initGunGPIO() const;
+            void setServoHeight(const uint pulsewidth) const;
+            void fireOneShot() const;
+            void gunCommandCallback(const std_msgs::Int32::ConstPtr& gunAngle) const;
+            void sendGpioCommand(const uint gpio, const std::string mode, const uint value) const;
         };
 
     } // namespace movement_controller

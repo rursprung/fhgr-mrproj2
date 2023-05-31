@@ -1,3 +1,3 @@
 uint8 gpio
-string mode  #PWM, Servo, GPIO
-int32 value
+string mode  #PWM, SERVO, GPIO
+uint32 value
