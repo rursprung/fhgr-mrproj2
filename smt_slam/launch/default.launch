@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="imu0_remove_gravitational_acceleration" default="true"/>
+
   <!-- odometry -->
   <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
     <rosparam command="load" file="$(find smt_slam)/config/localization.yaml" />
+    <rosparam param="imu0_remove_gravitational_acceleration">$(arg imu0_remove_gravitational_acceleration)"</rosparam>
   </node>
 
   <!-- SLAM -->
