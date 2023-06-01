@@ -1,5 +1,5 @@
-#include <pigpio.h>
-
+#include <pigpiod_if2.h>
+#include "smt_movement_controller/gpio_controller.hpp"
 #include "smt_movement_controller/movement_controller.hpp"
 
 enum class Pin {
@@ -48,47 +48,51 @@ namespace smt {
 
     namespace gpio_controller {
 
-        void initPi() {
-            setenv("PIGPIO_PORT", "8889", 1);
-            if (gpioInitialise() < 0) {
+        GpioController::GpioController() {
+            this->pi = pigpio_start(NULL, NULL);
+            if (this->pi < 0) {
                 throw std::runtime_error("error while trying to initialize pigpio!");
                 return;
             }
 
             // PWMs
-            gpioSetMode(static_cast<uint>(Pin::PWM_LEFT), PI_OUTPUT);
-            gpioSetMode(static_cast<uint>(Pin::PWM_RIGHT), PI_OUTPUT);
+            set_mode(this->pi, static_cast<uint>(Pin::PWM_LEFT), PI_OUTPUT);
+            set_mode(this->pi, static_cast<uint>(Pin::PWM_RIGHT), PI_OUTPUT);
 
-            gpioSetPWMfrequency(static_cast<uint>(Pin::PWM_LEFT), PWM_FREQ);
-            gpioSetPWMfrequency(static_cast<uint>(Pin::PWM_RIGHT), PWM_FREQ);
+            set_PWM_frequency(this->pi, static_cast<uint>(Pin::PWM_LEFT), PWM_FREQ);
+            set_PWM_frequency(this->pi, static_cast<uint>(Pin::PWM_RIGHT), PWM_FREQ);
 
-            gpioSetPWMrange(static_cast<uint>(Pin::PWM_LEFT), PWM_RANGE);
-            gpioSetPWMrange(static_cast<uint>(Pin::PWM_RIGHT), PWM_RANGE);
+            set_PWM_range(this->pi, static_cast<uint>(Pin::PWM_LEFT), PWM_RANGE);
+            set_PWM_range(this->pi, static_cast<uint>(Pin::PWM_RIGHT), PWM_RANGE);
 
             // GPIOs
-            gpioSetMode(static_cast<uint>(Pin::DIR_LEFT_1), PI_OUTPUT);
-            gpioSetMode(static_cast<uint>(Pin::DIR_LEFT_2), PI_OUTPUT);
-            gpioSetMode(static_cast<uint>(Pin::DIR_RIGHT_1), PI_OUTPUT);
-            gpioSetMode(static_cast<uint>(Pin::DIR_RIGHT_2), PI_OUTPUT);
+            set_mode(this->pi, static_cast<uint>(Pin::DIR_LEFT_1), PI_OUTPUT);
+            set_mode(this->pi, static_cast<uint>(Pin::DIR_LEFT_2), PI_OUTPUT);
+            set_mode(this->pi, static_cast<uint>(Pin::DIR_RIGHT_1), PI_OUTPUT);
+            set_mode(this->pi, static_cast<uint>(Pin::DIR_RIGHT_2), PI_OUTPUT);
 
-            gpioWrite(static_cast<uint>(Pin::DIR_LEFT_1), 0);
-            gpioWrite(static_cast<uint>(Pin::DIR_LEFT_2), 0);
-            gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_1), 0);
-            gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_2), 0);
+            gpio_write(this->pi, static_cast<uint>(Pin::DIR_LEFT_1), 0);
+            gpio_write(this->pi, static_cast<uint>(Pin::DIR_LEFT_2), 0);
+            gpio_write(this->pi, static_cast<uint>(Pin::DIR_RIGHT_1), 0);
+            gpio_write(this->pi, static_cast<uint>(Pin::DIR_RIGHT_2), 0);
         }
 
-        void applyMotorSpeed(const double vLeft, const double vRight) {
+        GpioController::~GpioController() {
+            pigpio_stop(this->pi);
+        }
+
+        void GpioController::applyMotorSpeed(const double vLeft, const double vRight) const {
             int pwm_val_left = map(abs(vLeft), 0, MAX_SPEED, 0, PWM_RANGE);
             int pwm_val_right = map(abs(vRight), 0, MAX_SPEED, 0, PWM_RANGE);
 
-            gpioWrite(static_cast<uint>(Pin::DIR_LEFT_1), vLeft < 0 ? 1 : 0);
-            gpioWrite(static_cast<uint>(Pin::DIR_LEFT_2), vLeft > 0 ? 1 : 0);
+            gpio_write(this->pi, static_cast<uint>(Pin::DIR_LEFT_1), vLeft < 0 ? 1 : 0);
+            gpio_write(this->pi, static_cast<uint>(Pin::DIR_LEFT_2), vLeft > 0 ? 1 : 0);
 
-            gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_1), vRight < 0 ? 0 : 1);
-            gpioWrite(static_cast<uint>(Pin::DIR_RIGHT_2), vRight > 0 ? 0 : 1);
+            gpio_write(this->pi, static_cast<uint>(Pin::DIR_RIGHT_1), vRight < 0 ? 0 : 1);
+            gpio_write(this->pi, static_cast<uint>(Pin::DIR_RIGHT_2), vRight > 0 ? 0 : 1);
 
-            gpioPWM(static_cast<uint>(Pin::PWM_LEFT), pwm_val_left);
-            gpioPWM(static_cast<uint>(Pin::PWM_RIGHT), pwm_val_right);
+            set_PWM_dutycycle(this->pi, static_cast<uint>(Pin::PWM_LEFT), pwm_val_left);
+            set_PWM_dutycycle(this->pi, static_cast<uint>(Pin::PWM_RIGHT), pwm_val_right);
         }
 
     }  // namespace gpio_controller
