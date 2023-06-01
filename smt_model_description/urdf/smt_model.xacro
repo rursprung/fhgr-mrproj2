@@ -158,14 +158,14 @@
       <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
     </inertial>
     <visual>
-      <origin xyz="-0.0 -0.0 -0.059" rpy="0 0 0"/>
+      <origin xyz="0.028 -0.0 -0.06" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://smt_model_description/meshes/IMU_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
-      <origin xyz="-0.0 -0.0 -0.059" rpy="0 0 0"/>
+      <origin xyz="0.028 -0.0 -0.06" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://smt_model_description/meshes/IMU_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
