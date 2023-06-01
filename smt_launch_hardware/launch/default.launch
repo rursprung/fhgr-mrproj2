@@ -2,6 +2,8 @@
 <launch>
   <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
 
+  <include file="$(find smt_gpio_controller)/launch/gpio_controller.launch"/>
+  <include file="$(find smt_gun_controller)/launch/gpio_controller.launch"/>
   <include file="$(find smt_camera_controller)/launch/camera_controller.launch"/>
   <include file="$(find smt_movement_controller)/launch/movement_controller.launch"/>
 
