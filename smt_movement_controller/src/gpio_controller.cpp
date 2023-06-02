@@ -87,13 +87,22 @@ namespace smt {
 
             gpio_write(this->pi, static_cast<uint>(Pin::DIR_LEFT_1), vLeft < 0 ? 1 : 0);
             gpio_write(this->pi, static_cast<uint>(Pin::DIR_LEFT_2), vLeft > 0 ? 1 : 0);
+            if (vLeft == 0) {
+                gpio_write(this->pi, static_cast<uint>(Pin::DIR_LEFT_2), 1);
+                gpio_write(this->pi, static_cast<uint>(Pin::DIR_LEFT_1), 1);
+            }
 
             gpio_write(this->pi, static_cast<uint>(Pin::DIR_RIGHT_1), vRight < 0 ? 0 : 1);
             gpio_write(this->pi, static_cast<uint>(Pin::DIR_RIGHT_2), vRight > 0 ? 0 : 1);
+            if (vRight == 0) {
+                gpio_write(this->pi, static_cast<uint>(Pin::DIR_RIGHT_1), 1);
+                gpio_write(this->pi, static_cast<uint>(Pin::DIR_RIGHT_2), 1);
+            }
 
             set_PWM_dutycycle(this->pi, static_cast<uint>(Pin::PWM_LEFT), pwm_val_left);
             set_PWM_dutycycle(this->pi, static_cast<uint>(Pin::PWM_RIGHT), pwm_val_right);
         }
+
 
     }  // namespace gpio_controller
 
