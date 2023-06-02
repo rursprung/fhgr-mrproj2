@@ -27,8 +27,10 @@ direction of movement.
 
 ### Mapping
 
-The mapping process will be conducted in 2D. However, it's important to note that the map will not be saved after the
-tank is powered off.
+A 2D map is being created using [SLAM](https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping) and can be
+downloaded using [hector_geotiff](https://wiki.ros.org/hector_geotiff). If it is not downloaded, the data will be lost
+once the software is stopped / the robot powered down.
+Currently, the robot does not support loading a pre-made map and continue mapping in it.
 
 ## Architecture
 
@@ -58,8 +60,7 @@ graph TD
 Note that various helper ROS nodes are not (yet) shown here. Only the main components are shown.
 
 When running in a simulator ([gazebo](https://gazebosim.org/)) the movement controller and gun controller will be
-replaced
-by a simulator version thereof which will then interact with gazebo rather than the real hardware.
+replaced by a simulator version thereof which will then interact with gazebo rather than the real hardware.
 
 Convention used (& invented) for this diagram:
 
