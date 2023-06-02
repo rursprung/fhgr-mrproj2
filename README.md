@@ -1,7 +1,8 @@
 # Mobile Robotics Project 2
 
-An autonomous vehicle with Lidar will be developed as a group project as part of
-the [FHGR BSc Mobile Robotics](https://fhgr.ch/mr).
+An autonomous vehicle with Lidar will be developed as a group project by [Tim Barmettler](https://github.com/TimBarmettler4),
+[Joel Flepp](https://github.com/joel5399), [Jan Gridling](https://github.com/Prince-Sigvald) and [Ralph Ursprung](https://github.com/rursprung)
+as part of the [FHGR BSc Mobile Robotics](https://fhgr.ch/mr).
 
 ## Goals of the Tank
 
