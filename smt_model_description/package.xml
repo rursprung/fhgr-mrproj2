@@ -44,6 +44,7 @@
 
   <depend>gazebo_ros</depend>
   <depend>xacro</depend>
+  <depend>urdf</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

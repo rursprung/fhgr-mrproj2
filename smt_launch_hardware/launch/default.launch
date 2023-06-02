@@ -11,5 +11,7 @@
   <include file="$(find smt_camera_controller)/launch/camera_controller.launch"/>
   <include file="$(find smt_movement_controller)/launch/movement_controller.launch"/>
 
-  <include file="$(find smt_launch_common)/launch/default.launch"/>
+  <include file="$(find smt_launch_common)/launch/default.launch">
+    <arg name="simulation" value="false"/>
+  </include>
 </launch>

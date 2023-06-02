@@ -51,6 +51,7 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <exec_depend>hector_slam</exec_depend>
+  <exec_depend>robot_localization</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
