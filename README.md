@@ -5,18 +5,10 @@ An autonomous vehicle with Lidar will be developed as a group project by [Tim Ba
 [Joel Flepp](https://github.com/joel5399), [Jan Gridling](https://github.com/Prince-Sigvald) and [Ralph Ursprung](https://github.com/rursprung)
 as part of the [FHGR BSc Mobile Robotics](https://fhgr.ch/mr).
 
-## Goals of the Tank
+## Features
 
-### Modes of Operation
-
-The tank will feature three different control modes:
-
-* In manual mode, the user will utilize a laptop GUI to control the tank using arrow keys. While in this mode, the lidar
-  will be active but won't map the room.
-* The automatic exploration mode will scan the room and create a map of the surroundings. The live progress will be
-  displayed in the laptop GUI.
-* Once the mapping is complete, the third mode can be activated. In this mode, the camera will be enabled and will
-  search for QR codes. Upon finding one, the gun will shoot at the QR code.
+The robot can be operated using the keyboard and driven around. While driving, it creates a map of its environment.
+In parallel, a camera is used to scan for a QR code and if this is found, the gun will shoot at the QR code.
 
 ### GUI
 
