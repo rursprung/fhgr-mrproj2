@@ -159,3 +159,8 @@ Afterward you can launch the on the robot:
 ```bash
 roslaunch smt_launch_hardware default.launch
 ```
+
+In order to remotely control the robot note down the `ROS_MASTER_URI` being printed out on startup and set
+the environment variable on your own PC with ROS installed so that you can then launch e.g. [`better_teleop`](https://github.com/ethz-asl/better_teleop)
+and/or `rviz`. You can use [`smt_launch_remote_control`](smt_launch_remote_control/README.md) to start all of this once
+you've set the `ROS_MASTER_URI` by running `roslaunch smt_launch_remote_control default.launch` on your PC.
