@@ -1,4 +1,5 @@
 # Mobile Robotics Project 2
+[![CI](https://github.com/rursprung/fhgr-mrproj2/actions/workflows/CI.yml/badge.svg)](https://github.com/rursprung/fhgr-mrproj2/actions/workflows/CI.yml)
 
 An autonomous vehicle with Lidar will be developed as a group project by [Tim Barmettler](https://github.com/TimBarmettler4),
 [Joel Flepp](https://github.com/joel5399), [Jan Gridling](https://github.com/Prince-Sigvald) and [Ralph Ursprung](https://github.com/rursprung)
