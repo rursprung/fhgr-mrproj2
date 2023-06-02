@@ -71,17 +71,11 @@ Convention used (& invented) for this diagram:
 
 ```mermaid
 stateDiagram-v2
-    [*] --> M: turn on
-    M --> A: switch to automatic
-    A --> M: switch to manual
-    M --> S: switch to QR code search
-    S --> M: switch to manual
-    S --> G: target identified
-    G --> M: shot fired
+    [*] --> D: turn on
+    D --> G: target identified
+    G --> D: shot fired
 
-    M: Manual Control (remote)
-    A: Automatic Exploration (Mapping)
-    S: QR Code Search
+    D: Drive mode (Mapping, QR Code Search)
     G: Gun Mode (shoot at target)
 ```
 
