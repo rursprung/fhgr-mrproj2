@@ -1,20 +1,14 @@
 # Mobile Robotics Project 2
+[![CI](https://github.com/rursprung/fhgr-mrproj2/actions/workflows/CI.yml/badge.svg)](https://github.com/rursprung/fhgr-mrproj2/actions/workflows/CI.yml)
 
-An autonomous vehicle with Lidar will be developed as a group project as part of
-the [FHGR BSc Mobile Robotics](https://fhgr.ch/mr).
+An autonomous vehicle with Lidar will be developed as a group project by [Tim Barmettler](https://github.com/TimBarmettler4),
+[Joel Flepp](https://github.com/joel5399), [Jan Gridling](https://github.com/Prince-Sigvald) and [Ralph Ursprung](https://github.com/rursprung)
+as part of the [FHGR BSc Mobile Robotics](https://fhgr.ch/mr).
 
-## Goals of the Tank
+## Features
 
-### Modes of Operation
-
-The tank will feature three different control modes:
-
-* In manual mode, the user will utilize a laptop GUI to control the tank using arrow keys. While in this mode, the lidar
-  will be active but won't map the room.
-* The automatic exploration mode will scan the room and create a map of the surroundings. The live progress will be
-  displayed in the laptop GUI.
-* Once the mapping is complete, the third mode can be activated. In this mode, the camera will be enabled and will
-  search for QR codes. Upon finding one, the gun will shoot at the QR code.
+The robot can be operated using the keyboard and driven around. While driving, it creates a map of its environment.
+In parallel, a camera is used to scan for a QR code and if this is found, the gun will shoot at the QR code.
 
 ### GUI
 
@@ -25,8 +19,10 @@ direction of movement.
 
 ### Mapping
 
-The mapping process will be conducted in 2D. However, it's important to note that the map will not be saved after the
-tank is powered off.
+A 2D map is being created using [SLAM](https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping) and can be
+downloaded using [hector_geotiff](https://wiki.ros.org/hector_geotiff). If it is not downloaded, the data will be lost
+once the software is stopped / the robot powered down.
+Currently, the robot does not support loading a pre-made map and continue mapping in it.
 
 ## Architecture
 
@@ -56,8 +52,7 @@ graph TD
 Note that various helper ROS nodes are not (yet) shown here. Only the main components are shown.
 
 When running in a simulator ([gazebo](https://gazebosim.org/)) the movement controller and gun controller will be
-replaced
-by a simulator version thereof which will then interact with gazebo rather than the real hardware.
+replaced by a simulator version thereof which will then interact with gazebo rather than the real hardware.
 
 Convention used (& invented) for this diagram:
 
@@ -76,17 +71,11 @@ Convention used (& invented) for this diagram:
 
 ```mermaid
 stateDiagram-v2
-    [*] --> M: turn on
-    M --> A: switch to automatic
-    A --> M: switch to manual
-    M --> S: switch to QR code search
-    S --> M: switch to manual
-    S --> G: target identified
-    G --> M: shot fired
+    [*] --> D: turn on
+    D --> G: target identified
+    G --> D: shot fired
 
-    M: Manual Control (remote)
-    A: Automatic Exploration (Mapping)
-    S: QR Code Search
+    D: Drive mode (Mapping, QR Code Search)
     G: Gun Mode (shoot at target)
 ```
 
