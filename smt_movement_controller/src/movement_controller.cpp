@@ -22,17 +22,12 @@ namespace smt {
             velSubscriber = nodeHandle.subscribe(velTopic, subscriberQueueSize, &MovementController::velocityCommandCallback, this);
             ROS_INFO("starting subscriber for %s with queue size %i", velTopic.c_str(), subscriberQueueSize);
 
-            smt::gpio_controller::initPi();
             ROS_INFO("init done");
-        }
-
-        MovementController::~MovementController() {
-            gpioTerminate();
         }
 
         void MovementController::velocityCommandCallback(const geometry_msgs::Twist::ConstPtr& velocity) const {
             std::pair<double, double> leftAndRightSpeed = mapRobotVelocityToMotorSpeed(velocity->linear.x, velocity->angular.z);
-            smt::gpio_controller::applyMotorSpeed(leftAndRightSpeed.first, leftAndRightSpeed.second);
+            this->gpioController.applyMotorSpeed(leftAndRightSpeed.first, leftAndRightSpeed.second);
         }
 
         std::pair<double, double> MovementController::mapRobotVelocityToMotorSpeed(const double& linear_speed, const double& angular_speed) const {

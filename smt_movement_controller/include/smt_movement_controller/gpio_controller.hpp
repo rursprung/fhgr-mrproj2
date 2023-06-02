@@ -4,8 +4,15 @@
 namespace smt {
     namespace gpio_controller {
 
-        void initPi();
-        void applyMotorSpeed(const double vLeft, const double vRight);
+        class GpioController {
+        public:
+            GpioController();
+            ~GpioController();
+            void applyMotorSpeed(const double vLeft, const double vRight) const;
+
+        private:
+            int pi; //< the ID returned by pigpio_start
+        };
 
     }  // namespace gpio_controller
 }  // namespace smt

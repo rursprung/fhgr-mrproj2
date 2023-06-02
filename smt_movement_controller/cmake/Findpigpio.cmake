@@ -8,6 +8,6 @@ ExternalProject_Add(pigpio
 ExternalProject_Get_Property(pigpio INSTALL_DIR)
 
 set(pigpio_INCLUDE_DIR ${INSTALL_DIR}/include)
-set(pigpio_LIBRARIES ${INSTALL_DIR}/lib/libpigpio.so)
+set(pigpio_LIBRARIES ${INSTALL_DIR}/lib/libpigpio.so ${INSTALL_DIR}/lib/libpigpiod_if2.so)
 
 mark_as_advanced(pigpio_INCLUDE_DIR pigpio_LIBRARIES)
