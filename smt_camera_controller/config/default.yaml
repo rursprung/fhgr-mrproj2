@@ -4,5 +4,5 @@ camera:
     height: 480
   fps: 10
 img_pub_topic:
-  topic: /image_raw
+  topic: /camera1/image_raw
   queue_size: 10
