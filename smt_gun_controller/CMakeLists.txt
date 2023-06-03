@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(smt_movement_controller)
+project(smt_gun_controller)
 
 ## Additional CMake Modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../cmake)
@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ## By adding -Wall and -Werror, the compiler does not ignore warnings anymore,
 ## enforcing cleaner code.
-add_definitions(-Wall -Werror -Wno-error=comment) 
+add_definitions(-Wall -Werror -Wno-error=comment)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -79,7 +79,7 @@ find_package(pigpio REQUIRED)
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
 
 ################################################
@@ -113,8 +113,8 @@ find_package(pigpio REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES controller_gpio
-#  CATKIN_DEPENDS roscpp std_msgs
+#  LIBRARIES smt_gun_controller
+#  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
 
@@ -130,6 +130,11 @@ include_directories(
   ${pigpio_INCLUDE_DIR}
 )
 
+## Declare a C++ library
+# add_library(${PROJECT_NAME}
+#   src/${PROJECT_NAME}/smt_gun_controller.cpp
+# )
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
@@ -140,9 +145,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(
   ${PROJECT_NAME}_node
-  src/gpio_controller.cpp
-  src/movement_controller.cpp
-  src/smt_movement_controller_node.cpp
+  src/gun_controller.cpp
+  src/smt_gun_controller_node.cpp
 )
 
 ## Rename C++ executable without prefix
@@ -210,7 +214,7 @@ target_link_libraries(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_controller_gpio.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_smt_gun_controller.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
