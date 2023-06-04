@@ -41,9 +41,9 @@ namespace smt {
             }
 
             return (pipeAngle - minimalPipeAngle) *
-                   (positivePulseWidthLimitation - negativePulseWidthLimitation) /
-                   (maximalPipeAngle - minimalPipeAngle) +
-                   negativePulseWidthLimitation;
+                (positivePulseWidthLimitation - negativePulseWidthLimitation) /
+                (maximalPipeAngle - minimalPipeAngle) +
+                negativePulseWidthLimitation;
         }
 
         GunController::GunController(ros::NodeHandle& nodeHandle) {
@@ -108,15 +108,9 @@ namespace smt {
 
         void GunController::moveGunToAngle(int const targetAngle) const {
             auto const targetPulseWidth = getPulseWidthFromPipeAngle(targetAngle);
-            auto const startPulseWidth = get_servo_pulsewidth(this->pi, static_cast<uint>(Pin::PWM_SERVO));
-            uint currentPulseWidth = startPulseWidth;
-            auto const step = targetPulseWidth > currentPulseWidth ? 1 : -1;
 
-            // Gradually adjust servo pulse widths to obtain smoother movement
-            for (; currentPulseWidth != targetPulseWidth; currentPulseWidth += step) {
-                set_servo_pulsewidth(this->pi, static_cast<uint>(Pin::PWM_SERVO), currentPulseWidth);
-                ros::Duration(0.002).sleep();
-            }
+            set_servo_pulsewidth(this->pi, static_cast<uint>(Pin::PWM_SERVO), targetPulseWidth);
+            ros::Duration(0.5).sleep();
         }
 
     } // namespace movement_controller
