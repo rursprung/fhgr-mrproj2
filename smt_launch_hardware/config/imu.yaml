@@ -1,0 +1,2 @@
+port: /dev/ttyS0
+frame_id: IMU_1

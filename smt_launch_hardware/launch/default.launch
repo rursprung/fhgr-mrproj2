@@ -8,6 +8,10 @@
     <param name="angle_compensate" type="bool" value="true"/>
   </node>
 
+  <node pkg="bosch_imu_driver" type="bosch_imu_node.py" name="bosch_imu_node" output="screen">
+    <rosparam file="$(find smt_launch_hardware)/config/imu.yaml" command="load"/>
+  </node>
+
   <include file="$(find smt_camera_controller)/launch/camera_controller.launch"/>
   <include file="$(find smt_movement_controller)/launch/movement_controller.launch"/>
   <include file="$(find smt_gun_controller)/launch/default.launch"/>
