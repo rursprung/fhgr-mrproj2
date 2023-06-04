@@ -155,12 +155,17 @@ $(rospack find rplidar_ros)/scripts/create_udev_rules.sh
 ```
 This only needs to be done once.
 
+
+Due to the limited computational power of the Raspberry Pi the compute heavy tasks have been offloaded to a more capable computer (usually a ROS-specific VM running on your notebook). Accordingly, there are two launch packages, one for the robot and one for the remote device (which will also start rviz and teleop).
+In order for the two to be able to communicate you need to ensure that they can see each other in the network. Note that for VMs this means that they must have a bridged network adapter instead of NAT so that they have an IP by which they're reachable from the outside. You'll also need to start `roscore` on one of the two and then set the `ROS_MASTER_URI` on the second to the first (check the `roscore` output there for the URL with the port number).
+Furthermore it's likely that you need to set the `ROS_IP` and `ROS_HOSTNAME` for things to work properly.
+
 Afterward you can launch the on the robot:
 ```bash
 roslaunch smt_launch_hardware default.launch
 ```
 
-In order to remotely control the robot note down the `ROS_MASTER_URI` being printed out on startup and set
-the environment variable on your own PC with ROS installed so that you can then launch e.g. [`better_teleop`](https://github.com/ethz-asl/better_teleop)
-and/or `rviz`. You can use [`smt_launch_remote_control`](smt_launch_remote_control/README.md) to start all of this once
-you've set the `ROS_MASTER_URI` by running `roslaunch smt_launch_remote_control default.launch` on your PC.
+And on your computer:
+```bash
+roslaunch smt_launch_remote_control default.launch
+```

@@ -52,6 +52,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <exec_depend>rviz</exec_depend>
   <exec_depend>better_teleop</exec_depend>
+  <exec_depend>smt_launch_common</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
