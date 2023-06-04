@@ -5,7 +5,12 @@
 
   <node name="better_teleop" pkg="better_teleop" type="better_teleop.py" output="screen">
     <rosparam param="forward_rate">0.5</rosparam>
-    <rosparam param="backward_rate">0.5</rosparam>
-    <rosparam param="rotation_rate">0.5</rosparam>
+    <rosparam param="backward_rate">2.5</rosparam>
+    <rosparam param="rotation_rate">2.5</rosparam>
   </node>
+
+  <include file="$(find smt_launch_common)/launch/default.launch">
+    <arg name="simulation" value="false"/>
+  </include>
+
 </launch>
