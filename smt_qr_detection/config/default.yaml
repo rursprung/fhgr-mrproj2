@@ -1,0 +1,11 @@
+img_sub_topic:
+  topic: /camera1/image_raw
+  queue_size: 10
+
+img_pub_topic:
+  topic: /image_processed
+  queue_size: 10
+
+gun_topic:
+  topic: /cmd_gun
+  queue_size: 10
