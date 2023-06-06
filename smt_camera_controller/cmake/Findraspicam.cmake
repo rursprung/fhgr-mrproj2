@@ -1,7 +1,7 @@
 include(ExternalProject)
 ExternalProject_Add(raspicam
   GIT_REPOSITORY    https://github.com/cedricve/raspicam.git
-  CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  CMAKE_ARGS        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -Wno-dev
 )
 
 ExternalProject_Get_Property(raspicam INSTALL_DIR)
