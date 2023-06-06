@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <launch>
   <arg name="simulation"/>
-  <arg name="rvizconfig" default="$(find smt_launch_remote_control)/rviz/default.rviz"/>
+  <arg name="rvizconfig" default="$(find smt_launch_common)/rviz/default.rviz"/>
   <node name="rviz" pkg="rviz" args="-d $(arg rvizconfig)" type="rviz" required="true"/>
 
   <include file="$(find smt_model_description)/launch/model.launch">
