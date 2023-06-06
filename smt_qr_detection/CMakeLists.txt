@@ -22,6 +22,8 @@ find_package(catkin REQUIRED COMPONENTS
   roslint
 )
 
+find_package(OpenCV CONFIG REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 

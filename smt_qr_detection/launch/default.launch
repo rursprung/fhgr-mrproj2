@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>   
+    <node name="smt_qr_detection" pkg="smt_qr_detection" type="node" output="screen">
+        <rosparam file="$(find smt_qr_detection)/config/default.yaml" command="load"/>
+    </node>
+</launch>
