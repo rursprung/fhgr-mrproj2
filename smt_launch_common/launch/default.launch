@@ -13,4 +13,5 @@
   </include>
 
   <include file="$(find smt_qr_finder)/launch/default.launch"/>
+  <include file="$(find smt_qr_controller)/launch/default.launch"/>
 </launch>
