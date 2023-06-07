@@ -15,6 +15,10 @@ add_definitions(-Wall -Werror)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslint
+  geometry_msgs
+  tf2
+  tf2_ros
+  tf2_geometry_msgs
   smt_msgs
   smt_svcs
 )

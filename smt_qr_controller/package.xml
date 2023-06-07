@@ -52,6 +52,10 @@
   <buildtool_depend>catkin</buildtool_depend>
   <buildtool_depend>roslint</buildtool_depend>
   <depend>roscpp</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>geometry_msgs</depend>
 
   <depend>smt_msgs</depend>
   <depend>smt_svcs</depend>
