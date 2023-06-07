@@ -6,6 +6,8 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 #include <geometry_msgs/Pose.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/transform_listener.h>
 
 #include <cv_bridge/cv_bridge.h>
 
@@ -29,11 +31,15 @@ namespace smt {
             ros::Subscriber imgSubscriber;
             ros::Publisher imgPublisher;
             ros::Publisher qrCodePublisher;
+            ros::Publisher qrCodePosePublisher;
+            tf2_ros::Buffer tfBuffer;
+            tf2_ros::TransformListener tfListener;
 
             zbar::ImageScanner zbarScanner;
 
             std::vector<QRFinder::QRCode> searchForQrCodes(cv::Mat const& img);
-            geometry_msgs::Pose calculateQrCodePose(QRFinder::QRCode const& qrCode) const;
+
+            geometry_msgs::Pose calculateQrCodePose(QRFinder::QRCode const& qrCode, int const width, int const height) const;
         };
     }  // namespace qr_detector
 

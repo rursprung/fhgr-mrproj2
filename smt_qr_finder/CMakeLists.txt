@@ -14,8 +14,12 @@ add_definitions(-Wall -Werror)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  geometry_msgs
   sensor_msgs
   cv_bridge
+  tf2
+  tf2_ros
+  tf2_geometry_msgs
   roslint
   smt_msgs
 )
