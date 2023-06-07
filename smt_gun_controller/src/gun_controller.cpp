@@ -31,12 +31,12 @@ namespace smt {
          */
         uint getPulseWidthFromPipeAngle(int const pipeAngle) {
             if (pipeAngle < minimalPipeAngle) {
-                ROS_WARN("reached minimum angle limitiation (%i deg), setting angle to %i deg", minimalPipeAngle, minimalPipeAngle);
+                ROS_WARN("reached minimum angle limitation (%i deg), setting angle to %i deg", minimalPipeAngle, minimalPipeAngle);
                 return negativePulseWidthLimitation;
             }
 
             if (pipeAngle > maximalPipeAngle) {
-                ROS_WARN("reached maximum angle limitiation (%i deg), setting angle to %i deg", maximalPipeAngle, maximalPipeAngle);
+                ROS_WARN("reached maximum angle limitation (%i deg), setting angle to %i deg", maximalPipeAngle, maximalPipeAngle);
                 return positivePulseWidthLimitation;
             }
 
@@ -47,21 +47,15 @@ namespace smt {
         }
 
         GunController::GunController(ros::NodeHandle& nodeHandle) {
-            std::string gunTopic;
-            int subscriberQueueSize;
+            std::string gunControllerService;
 
-            if (!nodeHandle.getParam("gun_controller_topic/topic", gunTopic)) {
-                ROS_ERROR("failed to load the `gun_controller_topic/topic` parameter!");
+            if (!nodeHandle.getParam("gun_controller_service", gunControllerService)) {
+                ROS_ERROR("failed to load the `gun_controller_service` parameter!");
                 ros::requestShutdown();
             }
 
-            if (!nodeHandle.getParam("gun_controller_topic/queue_size", subscriberQueueSize)) {
-                ROS_ERROR("failed to load the `gun_controller_topic/queue_size` parameter!");
-                ros::requestShutdown();
-            }
-
-            gunSubscriber = nodeHandle.subscribe(gunTopic, subscriberQueueSize, &GunController::gunCommandCallback, this);
-            ROS_INFO("starting subscriber for %s with queue size %i", gunTopic.c_str(), subscriberQueueSize);
+            this->service = nodeHandle.advertiseService(gunControllerService, &GunController::gunCommandCallback, this);
+            ROS_INFO_STREAM("starting service " << gunControllerService);
 
             this->initPi();
 
@@ -88,8 +82,8 @@ namespace smt {
             this->moveGunToAngle(defaultPipeAngle);
         }
 
-        void GunController::gunCommandCallback(const std_msgs::Int32::ConstPtr& gunAngle) const {
-            this->moveGunToAngle(gunAngle->data);
+        bool GunController::gunCommandCallback(smt_svcs::FireGun::Request& request, smt_svcs::FireGun::Response& response) {
+            this->moveGunToAngle(request.angle);
 
             // use a small delay to make it look smoother
             ros::Duration(0.5).sleep();
@@ -98,6 +92,8 @@ namespace smt {
 
             this->moveGunToAngle(defaultPipeAngle);
 
+            response.success = true;
+            return true;
         }
 
         void GunController::fireShot() const {

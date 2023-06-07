@@ -53,6 +53,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <buildtool_depend>roslint</buildtool_depend>
   <depend>roscpp</depend>
+  <depend>smt_svcs</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>smt_qr_msgs</name>
+  <name>smt_svcs</name>
   <version>0.0.0</version>
-  <description>Contains the message format(s) used by the QR code finder.</description>
+  <description>Contains the service format(s) used by the SMT project.</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,13 +19,14 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/smt_qr_msgs</url> -->
+  <!-- <url type="website">http://wiki.ros.org/smt_svcs</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
   <!-- Authors do not have to be maintainers, but could be -->
   <!-- Example: -->
   <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
+  <author email="ralph.ursprung@gmail.com">Ralph Ursprung</author>
 
 
   <!-- The *depend tags are used to specify dependencies -->
@@ -52,7 +53,6 @@
   <build_depend>message_generation</build_depend>
   <exec_depend>message_runtime</exec_depend>
   <depend>std_msgs</depend>
-  <depend>geometry_msgs</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

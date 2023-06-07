@@ -17,8 +17,8 @@ add_definitions(-Wall -Werror -Wno-error=comment)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  std_msgs
   roslint
+  smt_svcs
 )
 
 ## System dependencies are found with CMake's conventions

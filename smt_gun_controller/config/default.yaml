@@ -1,3 +1,1 @@
-gun_controller_topic:
-  topic: /cmd_gun
-  queue_size: 10
+gun_controller_service: fire

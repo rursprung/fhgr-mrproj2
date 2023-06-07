@@ -2,7 +2,7 @@
 #include <vector>
 
 #include <ros/ros.h>
-#include <smt_qr_msgs/PoseWithString.h>
+#include <smt_msgs/PoseWithString.h>
 
 #include "smt_qr_finder/QRFinder.hpp"
 
@@ -52,7 +52,7 @@ namespace smt {
             imgPublisher = nodeHandle.advertise<sensor_msgs::Image>(imgPubTopic, imgPubQueueSize);
             ROS_INFO("starting publisher for %s with queue size %i", imgPubTopic.c_str(), imgPubQueueSize);
 
-            qrCodePublisher = nodeHandle.advertise<smt_qr_msgs::PoseWithString>(qrCodePubTopic, qrCodePubQueueSize);
+            qrCodePublisher = nodeHandle.advertise<smt_msgs::PoseWithString>(qrCodePubTopic, qrCodePubQueueSize);
             ROS_INFO("starting publisher for %s with queue size %i", qrCodePubTopic.c_str(), qrCodePubQueueSize);
 
             zbarScanner.set_config(zbar::ZBAR_NONE, zbar::ZBAR_CFG_ENABLE, 1);
@@ -79,7 +79,7 @@ namespace smt {
                 cv::polylines(taggedImage, qrCode.polygon, true, COLOUR_GREEN);
 
                 // calculate & publish QR code position
-                smt_qr_msgs::PoseWithString positionMsg;
+                smt_msgs::PoseWithString positionMsg;
                 positionMsg.header.frame_id = "odom";
                 positionMsg.text = qrCode.text;
                 positionMsg.pose = this->calculateQrCodePose(qrCode);
