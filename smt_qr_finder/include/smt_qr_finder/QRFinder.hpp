@@ -1,6 +1,8 @@
 #ifndef SMT_QR_FINDER_QRFINDER_HPP
 #define SMT_QR_FINDER_QRFINDER_HPP
 
+#include <vector>
+
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 #include <geometry_msgs/Pose.h>
@@ -21,7 +23,7 @@ namespace smt {
         private:
             struct QRCode {
                 std::string text;
-                std::vector<cv::Point> const& polygon;
+                std::vector<cv::Point> const polygon;
             };
 
             ros::Subscriber imgSubscriber;
@@ -31,7 +33,7 @@ namespace smt {
             zbar::ImageScanner zbarScanner;
 
             std::vector<QRFinder::QRCode> searchForQrCodes(cv::Mat const& img);
-            geometry_msgs::Pose calculateQrCodePose(QRFinder::QRCode) const;
+            geometry_msgs::Pose calculateQrCodePose(QRFinder::QRCode const& qrCode) const;
         };
     }  // namespace qr_detector
 
