@@ -24,6 +24,11 @@ downloaded using [hector_geotiff](https://wiki.ros.org/hector_geotiff). If it is
 once the software is stopped / the robot powered down.
 Currently, the robot does not support loading a pre-made map and continue mapping in it.
 
+To save the map to [`smt_slam/maps`](smt_slam/maps) run:
+```bash
+rostopic pub /syscommand std_msgs/String -1 "data: 'savegeiff'"
+```
+
 ## Architecture
 
 ### Structure
