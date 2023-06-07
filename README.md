@@ -28,31 +28,49 @@ Currently, the robot does not support loading a pre-made map and continue mappin
 
 ### Structure
 
-The software will be roughly structured along these boundaries:
+The software is structured along these boundaries:
 
 ```mermaid
 graph TD
-  Controller -->|"move command<br/>message: <code>geometry_msgs/Twist</code><br/>topic: <code>/cmd_vel</code>"| MC
+  Teleop -->|"move command<br/>message: <code>geometry_msgs/Twist</code><br/>topic: <code>/cmd_vel</code>"| MC
 
-  MC[ Movement Controller ]
-  MC -->| PWM signal| LM[[ Left Motor ]]
-  MC -->|PWM signal | RM[[ Right Motor ]]
+  MC[Movement Controller]
+  MC -->|PWM signal| LM[[Left Motor]]
+  MC -->|PWM signal| RM[[Right Motor]]
 
-  Controller -->|"fire command<br/>service: <code>FireAt</code><br/>request:<code>geometry_msgs/Point</code>"| GC
-  GC[ Gun Controller ] -->| PWM signal| GS
-  GC -->| Trigger signal | GT
+  Camera[[Camera]] --> CameraController
+  CameraController[Camera Controller] -->|"image<br/>message: <code>sensor_msgs/Image</code><br/>topic: <code>/camera1/image_raw</code>"| QRCodeFinder
+  QRCodeFinder[QR Code Finder] -->|"QR Code Pose<br/>message: <code>smt_qr_msgs/PoseWithString</code><br/>(= <code>geometry_msgs/Pose</code> + <code>string</code>)<br/>topic: <code>/qr_codes</code>"| QRCodeController
+
+  QRCodeController[QR Code Controller] -->|"fire command<br/>service: <code>FireAt</code><br/>request:<code>std_msgs/Int32</code> (angle)"| GC
+  GC[Gun Controller] -->|PWM signal| GS
+  GC -->|Trigger signal| GT
   GS[["Gun Servo (height adjust)"]]
-  GT[[ Gun Trigger ]]
+  GT[[Gun Trigger]]
 
-  LIDAR[[LIDAR ]] -->|"point cloud<br/>message: <code>sensor_msgs/LaserScan</code><br/>topic: <code>/scan</code>"| Controller
-  Camera[[ Camera ]] -->|"image<br/>message: <code>sensor_msgs/Image</code><br/>topic: <code>/image</code>"| IP
-  IP[ Image Processor ] -->|"target information<br/>message: <code>geometry_msgs/PointStamped</code><br/>topic: <code>/target</code>"| Controller
+  LIDAR[[LIDAR]] --> rplidar
+  rplidar[rplidar_ros] -->|"point cloud<br/>message: <code>sensor_msgs/LaserScan</code><br/>topic: <code>/scan</code>"| hector_mapping
+
+  IMU[["IMU (Bosch BNO055)"]] --> IMUdriver
+  IMUdriver[Bosch IMU Driver] --> |"IMU data<br/>message: <code>sensor_msgs/Imu</code><br/>topic: <code>/imu</code>"| ekf_localization
+
+  ekf_localization -->|odom| hector_mapping
+  ekf_localization -->|odom| tf
+  hector_mapping["Hector Mapping (SLAM)"] -->|map| tf
+
+  hector_mapping -->|"Pose Estimate<br/>message: <code>geometry_msgs/PoseStamped</code><br/>topic: <code>/poseupdate</code>"| ekf_localization
+
+  model[Robot Model]
+  model --> robot_state_publisher
+  model --> joint_state_publisher
+  robot_state_publisher --> tf
+  joint_state_publisher --> tf
 ```
 
-Note that various helper ROS nodes are not (yet) shown here. Only the main components are shown.
+Note that various helper ROS nodes are not shown here. Only the main components are shown.
 
-When running in a simulator ([gazebo](https://gazebosim.org/)) the movement controller and gun controller will be
-replaced by a simulator version thereof which will then interact with gazebo rather than the real hardware.
+When running in a simulator ([gazebo](https://gazebosim.org/)) the hardware related controllers will be replaced
+with simulator versions thereof, which will then interact with gazebo rather than the real hardware.
 
 Convention used (& invented) for this diagram:
 
