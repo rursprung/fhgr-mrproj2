@@ -114,7 +114,7 @@ namespace smt {
             return qrCodes;
         }
 
-        geometry_msgs::Pose QRFinder::calculateQrCodePose(QRFinder::QRCode) const {
+        geometry_msgs::Pose QRFinder::calculateQrCodePose(QRFinder::QRCode const& qrCode) const {
             // TODO: 1. identify QR code size & orientation
             // TODO: 2. calculate vector from camera to QR code
             // TODO: 3. create pose (point + orientation) with this information
