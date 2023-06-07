@@ -9,6 +9,4 @@
   <include file="$(find smt_launch_common)/launch/default.launch">
     <arg name="simulation" value="false"/>
   </include>
-
-  <include file="$(find smt_qr_finder)/launch/default.launch"/>
 </launch>

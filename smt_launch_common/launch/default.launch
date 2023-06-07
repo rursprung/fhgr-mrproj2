@@ -11,4 +11,6 @@
     <!-- Gazebo includes the gravitation in its measurement, the BNO055 sensor (in the way we use it) doesn't. -->
     <arg name="imu0_remove_gravitational_acceleration" value="$(arg simulation)"/>
   </include>
+
+  <include file="$(find smt_qr_finder)/launch/default.launch"/>
 </launch>
