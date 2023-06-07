@@ -1,0 +1,5 @@
+gun_controller_service: /smt_gun_controller/fire
+
+qr_code_topic:
+  topic: /qr_codes
+  queue_size: 10
