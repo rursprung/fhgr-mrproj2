@@ -3,19 +3,22 @@
 
 #include <ros/ros.h>
 #include <smt_msgs/PoseWithString.h>
+#include <geometry_msgs/Pose.h>
 
 #include "smt_qr_finder/QRFinder.hpp"
 
 
 namespace smt {
     namespace qr_finder {
-        QRFinder::QRFinder(ros::NodeHandle& nodeHandle) {
+        QRFinder::QRFinder(ros::NodeHandle& nodeHandle) :tfListener(tfBuffer) {
             std::string imgSubTopic;
             int imgSubQueueSize;
             std::string imgPubTopic;
             int imgPubQueueSize;
             std::string qrCodePubTopic;
             int qrCodePubQueueSize;
+            std::string qrCodePoseTopic;
+            int qrCodePoseQueueSize;
 
             if (!nodeHandle.getParam("img_sub_topic/topic", imgSubTopic)) {
                 ROS_ERROR("failed to load the `img_sub_topic/topic` parameter!");
@@ -46,6 +49,17 @@ namespace smt {
                 ROS_ERROR("failed to load the `gun_topic/queue_size` parameter!");
                 ros::requestShutdown();
             }
+
+            if (!nodeHandle.getParam("qr_code_pose_topic/topic", qrCodePoseTopic)) {
+                ROS_ERROR("failed to load the `gun_topic/topic` parameter!");
+                ros::requestShutdown();
+            }
+
+            if (!nodeHandle.getParam("qr_code_pose_topic/queue_size", qrCodePoseQueueSize)) {
+                ROS_ERROR("failed to load the `gun_topic/queue_size` parameter!");
+                ros::requestShutdown();
+            }
+
             imgSubscriber = nodeHandle.subscribe(imgSubTopic, imgSubQueueSize, &QRFinder::imgCallback, this);
             ROS_INFO("starting subscriber for %s with queue size %i", imgSubTopic.c_str(), imgSubQueueSize);
 
@@ -54,6 +68,9 @@ namespace smt {
 
             qrCodePublisher = nodeHandle.advertise<smt_msgs::PoseWithString>(qrCodePubTopic, qrCodePubQueueSize);
             ROS_INFO("starting publisher for %s with queue size %i", qrCodePubTopic.c_str(), qrCodePubQueueSize);
+
+            qrCodePosePublisher = nodeHandle.advertise<geometry_msgs::PoseStamped>(qrCodePoseTopic, qrCodePoseQueueSize);
+            ROS_INFO("starting publisher for %s with queue size %i", qrCodePoseTopic.c_str(), qrCodePoseQueueSize);
 
             zbarScanner.set_config(zbar::ZBAR_NONE, zbar::ZBAR_CFG_ENABLE, 1);
 
@@ -66,24 +83,30 @@ namespace smt {
 
             auto const& qrCodes = searchForQrCodes(image);
 
-            if(qrCodes.empty()) {
+            if (qrCodes.empty()) {
                 return;
             }
 
             cv::Mat taggedImage = image.clone();
             for (auto const& qrCode : qrCodes) {
-                ROS_INFO_STREAM("found QR code: " << qrCode.text << " located at " << qrCode.polygon);
+                ROS_DEBUG_STREAM("found QR code: " << qrCode.text << " located at " << qrCode.polygon);
 
                 // tag QR code on image
-                cv::Scalar const COLOUR_GREEN = {0, 255, 0};
-                cv::polylines(taggedImage, qrCode.polygon, true, COLOUR_GREEN);
+                cv::Scalar const COLOUR_GREEN = { 0, 255, 0 };
+                cv::polylines(taggedImage, qrCode.polygon, true, COLOUR_GREEN, 2);
 
                 // calculate & publish QR code position
                 smt_msgs::PoseWithString positionMsg;
                 positionMsg.header.frame_id = "odom";
                 positionMsg.text = qrCode.text;
-                positionMsg.pose = this->calculateQrCodePose(qrCode);
+                positionMsg.pose = this->calculateQrCodePose(qrCode, image.cols, image.rows);
                 qrCodePublisher.publish(positionMsg);
+
+                // publish QR code pose
+                geometry_msgs::PoseStamped poseMsg;
+                poseMsg.header.frame_id = "odom";
+                poseMsg.pose = positionMsg.pose;
+                qrCodePosePublisher.publish(poseMsg);
             }
 
             // publish tagged image
@@ -105,21 +128,47 @@ namespace smt {
             for (auto s = zbarImg.symbol_begin(); s != zbarImg.symbol_end(); ++s)
             {
                 std::vector<cv::Point> polygon;
-                for(int i = 0; i < s->get_location_size(); i++) {
+                for (int i = 0; i < s->get_location_size(); i++) {
                     polygon.emplace_back(s->get_location_x(i), s->get_location_y(i));
                 }
-                qrCodes.push_back({s->get_data(), polygon});
+                qrCodes.push_back({ s->get_data(), polygon });
             }
 
             return qrCodes;
         }
 
-        geometry_msgs::Pose QRFinder::calculateQrCodePose(QRFinder::QRCode const& qrCode) const {
-            // TODO: 1. identify QR code size & orientation
-            // TODO: 2. calculate vector from camera to QR code
-            // TODO: 3. create pose (point + orientation) with this information
-            // TODO: 4. transform pose to `odom` frame using tf
-            return {};
+
+        geometry_msgs::Pose QRFinder::calculateQrCodePose(QRFinder::QRCode const& qrCode, int const width, int const height) const {
+            auto points = qrCode.polygon;
+            const auto distanceFactor = 93.09; //!< must be calculated one time with the cam. [pixele * meter] (messured distance * pixel)
+            const auto horizontalDistaneToQrCodeInMeter = distanceFactor / (points.at(0).y - points.at(1).y);
+            const auto qrCodeHeight = 0.145; //!< Height of QR-Code in m
+            const auto factorMPerPixel = qrCodeHeight / (points.at(0).x - points.at(3).x);
+
+            const auto midXAxisQrCode = (points.at(0).x - points.at(3).x) / 2 + points.at(3).x;
+            const auto midXAxisImg = width / 2;
+            const auto qrDistanceToMidAxisInMeter = (midXAxisImg - midXAxisQrCode) * factorMPerPixel;
+
+            // Erstelle eine Instanz der Pose-Nachricht
+            geometry_msgs::Pose poseInCameraFrame;
+
+            poseInCameraFrame.position.x = horizontalDistaneToQrCodeInMeter;
+            poseInCameraFrame.position.y = qrDistanceToMidAxisInMeter;
+            poseInCameraFrame.position.z = 0.02;
+
+            poseInCameraFrame.orientation.x = 0.0;
+            poseInCameraFrame.orientation.y = 0.0;
+            poseInCameraFrame.orientation.z = 0.0;
+            poseInCameraFrame.orientation.w = 1.0;
+
+
+            geometry_msgs::TransformStamped transformStamped;
+            transformStamped = this->tfBuffer.lookupTransform("odom", "cam_1", ros::Time(0));
+
+            geometry_msgs::Pose poseInOdomFrame;
+            tf2::doTransform(poseInCameraFrame, poseInOdomFrame, transformStamped);
+
+            return poseInOdomFrame;
         }
 
     } // namesspace qr_detector

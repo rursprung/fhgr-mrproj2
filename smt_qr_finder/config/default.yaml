@@ -9,3 +9,7 @@ img_pub_topic:
 qr_code_topic:
   topic: /qr_codes
   queue_size: 10
+
+qr_code_pose_topic:
+  topic: /qr_code_pose
+  queue_size: 10

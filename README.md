@@ -40,7 +40,7 @@ graph TD
 
   Camera[[Camera]] --> CameraController
   CameraController[Camera Controller] -->|"image<br/>message: <code>sensor_msgs/Image</code><br/>topic: <code>/camera1/image_raw</code>"| QRCodeFinder
-  QRCodeFinder[QR Code Finder] -->|"QR Code Pose<br/>message: <code>smt_qr_msgs/PoseWithString</code><br/>(= <code>geometry_msgs/Pose</code> + <code>string</code>)<br/>topic: <code>/qr_codes</code>"| QRCodeController
+  QRCodeFinder[QR Code Finder] -->|"QR Code Pose<br/>message: <code>smt_msgs/PoseWithString</code><br/>(= <code>geometry_msgs/Pose</code> + <code>string</code>)<br/>topic: <code>/qr_codes</code>"| QRCodeController
 
   QRCodeController[QR Code Controller] -->|"fire command<br/>service: <code>FireAt</code><br/>request:<code>std_msgs/Int32</code> (angle)"| GC
   GC[Gun Controller] -->|PWM signal| GS
