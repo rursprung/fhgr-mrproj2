@@ -1,0 +1,11 @@
+img_sub_topic:
+  topic: /camera1/image_raw
+  queue_size: 10
+
+img_pub_topic:
+  topic: /image/processed
+  queue_size: 10
+
+qr_code_topic:
+  topic: /qr_codes
+  queue_size: 10

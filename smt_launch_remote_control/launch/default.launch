@@ -10,4 +10,5 @@
     <arg name="simulation" value="false"/>
   </include>
 
+  <include file="$(find smt_qr_finder)/launch/default.launch"/>
 </launch>
