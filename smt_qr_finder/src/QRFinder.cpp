@@ -66,10 +66,6 @@ namespace smt {
 
             auto const& qrCodes = searchForQrCodes(image);
 
-            if(qrCodes.empty()) {
-                return;
-            }
-
             cv::Mat taggedImage = image.clone();
             for (auto const& qrCode : qrCodes) {
                 ROS_INFO_STREAM("found QR code: " << qrCode.text << " located at " << qrCode.polygon);
