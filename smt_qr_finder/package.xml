@@ -55,7 +55,7 @@
   <depend>cv_bridge</depend>
   <depend>zbar</depend>
 
-  <depend>smt_qr_msgs</depend>
+  <depend>smt_msgs</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

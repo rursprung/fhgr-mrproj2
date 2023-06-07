@@ -17,7 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   cv_bridge
   roslint
-  smt_qr_msgs
+  smt_msgs
 )
 
 ## System dependencies are found with CMake's conventions
