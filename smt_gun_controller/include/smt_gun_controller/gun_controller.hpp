@@ -2,7 +2,7 @@
 #define SMT_GUN_CONTROLLER_GUN_CONTROLLER_HPP
 
 #include <ros/ros.h>
-#include <std_msgs/Int32.h>
+#include <smt_svcs/FireGun.h>
 
 namespace smt {
     namespace gun_controller {
@@ -15,14 +15,14 @@ namespace smt {
         private:
             int pi; //< the ID returned by pigpio_start
 
-            ros::Subscriber gunSubscriber;
+            ros::ServiceServer service;
 
             void initPi();
 
             void fireShot() const;
             void moveGunToAngle(int targetAngle) const;
 
-            void gunCommandCallback(const std_msgs::Int32::ConstPtr &gunAngle) const;
+            bool gunCommandCallback(smt_svcs::FireGun::Request& request, smt_svcs::FireGun::Response& response);
         };
 
     } // namespace movement_controller
