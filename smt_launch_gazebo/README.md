@@ -1,3 +1,5 @@
-# Common SMT Launch Configuration
-This contains all launch configuration which is common between the [simulation](../smt_launch_gazebo)
-and the [robot](../smt_launch_hardware).
+# SMT Simulation (Gazebo) Launch
+
+This launches the simulation of the robot in Gazebo.
+Note that the model used in Gazebo is less elaborate than the real hardware, e.g. it is modelled as a wheeled robot
+instead of having tracks as this already existed for Gazebo.
